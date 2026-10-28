@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AMTSystem.Core/AMTSystem.Core.csproj" />
+    <Project Path="src/AMTSystem.Data/AMTSystem.Data.csproj" />
+    <Project Path="src/AMTSystem.Wpf/AMTSystem.Wpf.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AMTSystem.Tests/AMTSystem.Tests.csproj" />
+  </Folder>
+</Solution>
