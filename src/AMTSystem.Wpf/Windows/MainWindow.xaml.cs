@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
+using AMTSystem.Wpf.Views;
 
 namespace AMTSystem.Wpf.Windows;
 /// <summary>
@@ -19,5 +12,17 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        ContentArea.Content = new DashboardView();
+    }
+
+    public void Nav_Click(object sender, RoutedEventArgs e)
+    {
+        var tag = (sender as Button)?.Tag as string;
+
+        ContentArea.Content = tag switch
+        {
+            //"Dashboard" => new DashboardView(),
+            _ => new TextBlock { Text = $"{tag} (not built yet)" }
+        };
     }
 }
