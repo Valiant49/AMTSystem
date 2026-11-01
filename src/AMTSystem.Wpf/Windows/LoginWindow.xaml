@@ -10,50 +10,67 @@
     Height="450"
     mc:Ignorable="d">
     <Grid>
-        <Label
-            Margin="0,147,0,0"
+        <Border
+            Width="380"
+            Padding="35"
             HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Content="ASSET MANAGEMENT" />
-        <Label
-            Margin="0,173,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Content="IT DEPARTMENT" />
-
-        <Label
-            Margin="336,228,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Content="Username:" />
-        <TextBox
-            Name="txbUsername"
-            Width="120"
-            Margin="0,249,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            TextChanged="InputField_Changed"
-            TextWrapping="Wrap" />
-
-        <Label
-            Margin="336,267,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Content="Password:" />
-        <PasswordBox
-            Name="txbPassword"
-            Width="120"
-            Margin="0,289,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            PasswordChanged="InputField_Changed" />
-        <Button
-            x:Name="btnLogin"
-            Margin="0,354,0,0"
-            Padding="8,4,8,4"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Click="btnLogin_Click"
-            Content="LOGIN" />
+            VerticalAlignment="Center"
+            Background="White"
+            CornerRadius="12">
+            <StackPanel>
+                <TextBlock
+                    Margin="0,0,0,8"
+                    HorizontalAlignment="Center"
+                    FontSize="23"
+                    FontWeight="Bold"
+                    Foreground="#299617"
+                    Text="ASSET MANAGEMENT" />
+                <TextBlock
+                    Margin="0,0,0,30"
+                    HorizontalAlignment="Center"
+                    FontSize="14"
+                    Foreground="Gray"
+                    Text="IT Department" />
+                <TextBlock
+                    Margin="0,0,0,7"
+                    FontWeight="SemiBold"
+                    Text="Username" />
+                <TextBox
+                    Name="txbUsername"
+                    Height="38"
+                    Margin="0,0,0,18"
+                    Padding="8"
+                    FontSize="14"
+                    TextChanged="InputField_Changed" />
+                <TextBlock
+                    Margin="0,0,0,7"
+                    FontWeight="SemiBold"
+                    Text="Password" />
+                <PasswordBox
+                    Name="txbPassword"
+                    Height="38"
+                    Margin="0,0,0,25"
+                    Padding="8"
+                    FontSize="14"
+                    PasswordChanged="InputField_Changed" />
+                <Button
+                    x:Name="btnLogin"
+                    Height="42"
+                    Background="#299617"
+                    BorderThickness="0"
+                    Click="btnLogin_Click"
+                    Content="LOG IN"
+                    Cursor="Hand"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="white" />
+                <TextBlock
+                    Margin="0,25,0,0"
+                    HorizontalAlignment="Center"
+                    FontSize="10"
+                    Foreground="Gray"
+                    Text="IT Department Asset Management System" />
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>
