@@ -11,14 +11,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AMTSystem.Wpf.Views;
-/// <summary>
-/// Interaction logic for DashboardView.xaml
-/// </summary>
-public partial class DashboardView : UserControl
+namespace AMTSystem.Wpf.Views
 {
-    public DashboardView()
+    /// <summary>
+    /// Interaction logic for IssueView.xaml
+    /// </summary>
+    public partial class IssueView : Page
     {
-        InitializeComponent();
+        public IssueView()
+        {
+            InitializeComponent();
+        }
     }
 }

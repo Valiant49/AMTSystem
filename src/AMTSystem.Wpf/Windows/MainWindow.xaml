@@ -13,8 +13,9 @@
         <!--  Style for sidebar buttons  -->
         <Style x:Key="NavButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Foreground" Value="#080808" />
             <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="DemiBold" />
             <Setter Property="Padding" Value="12,8" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="Cursor" Value="Hand" />
@@ -30,7 +31,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#374151" />
+                                <Setter TargetName="bd" Property="Background" Value="#cbcbcb" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -42,22 +43,47 @@
         <Style x:Key="NavHeader" TargetType="TextBlock">
             <Setter Property="Foreground" Value="DarkGreen" />
             <Setter Property="FontSize" Value="11" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="12,16,0,4" />
+            <Setter Property="FontWeight" Value="ExtraBold" />
+            <Setter Property="Margin" Value="4,18,4,4" />
+        </Style>
+
+        <Style x:Key="SystemTitle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="DarkGreen" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="ExtraBold" />
+            <Setter Property="Margin" Value="4,4,4,4" />
+            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
         </Style>
     </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Background="DarkSeaGreen">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Background="DarkSeaGreen">
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Style="{DynamicResource SystemTitle}"
+                Text="ASSET MONITORING SYSTEM"
+                TextAlignment="Center" />
+        </Border>
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Background="DarkSeaGreen">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="8">
-                    <TextBlock
-                        Style="{StaticResource NavHeader}"
-                        Text="ASSET MONITORING SYSTEM"
-                        TextAlignment="Center" />
+
                     <Button
                         Click="Nav_Click"
                         Content="Dashboard"
@@ -129,8 +155,22 @@
         </Border>
 
         <ContentControl
-            x:Name="ContentArea"
+            x:Name="TopBar"
+            Grid.Row="0"
             Grid.Column="1"
-            Margin="16" />
+            Margin="4,4,4,4">
+            <TextBlock
+                x:Name="HeaderText"
+                VerticalAlignment="Center"
+                FontSize="24"
+                Text="Welcome, user." />
+        </ContentControl>
+
+        <ContentControl
+            x:Name="ContentArea"
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="16"
+            Background="Green" />
     </Grid>
 </Window>

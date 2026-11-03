@@ -13,16 +13,46 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         ContentArea.Content = new DashboardView();
+
+    }
+
+    public void setHeaderText(string headerText)
+    {
+        HeaderText.Text = headerText;
     }
 
     public void Nav_Click(object sender, RoutedEventArgs e)
     {
         var tag = (sender as Button)?.Tag as string;
 
-        ContentArea.Content = tag switch
+        //ContentArea.Content = tag;
+            
+        switch (tag)
         {
-            //"Dashboard" => new DashboardView(),
-            _ => new TextBlock { Text = $"{tag} (not built yet)" }
-        };
+            case "Dashboard":
+                new DashboardView();
+                setHeaderText("Dashboard");
+                break;
+            case "AllAssets":
+                new AllAssetsView();
+                setHeaderText("All Assets");
+                break;
+            case "Register":
+                new RegisterView();
+                setHeaderText("Register Assets");
+                break;
+            case "Issue":
+                new IssueView();
+                setHeaderText("Issue Assets");
+                break;
+            case "Lend":
+                new LendView();
+                setHeaderText("Lend Assets");
+                break;
+            case "Return":
+                new ReturnView();
+                setHeaderText("Return Assets");
+                break;
+        }
     }
 }

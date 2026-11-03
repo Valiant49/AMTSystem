@@ -8,5 +8,12 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid />
+    <Grid>
+        <TextBlock
+            Margin="26,30,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Text="Overview of the entire system."
+            TextWrapping="Wrap" />
+    </Grid>
 </UserControl>
