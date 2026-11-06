@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-using AMTSystem.Wpf.Views;
+using AMTSystem.Wpf.Views.AssetMgmt;
 
 namespace AMTSystem.Wpf.Windows;
 /// <summary>
@@ -25,32 +25,31 @@ public partial class MainWindow : Window
     {
         var tag = (sender as Button)?.Tag as string;
 
-        //ContentArea.Content = tag;
-            
         switch (tag)
         {
             case "Dashboard":
-                new DashboardView();
+                ContentArea.Content = new DashboardView();
                 setHeaderText("Dashboard");
                 break;
             case "AllAssets":
-                new AllAssetsView();
+                ContentArea.Content = new AllAssetsView();
                 setHeaderText("All Assets");
                 break;
             case "Register":
-                new RegisterView();
+                //ContentArea.Content = new RegisterView(new Core.Models.AssetDraft());
+                ContentArea.Content = new RegisterFlowView();
                 setHeaderText("Register Assets");
                 break;
             case "Issue":
-                new IssueView();
+                ContentArea.Content = new IssueView();
                 setHeaderText("Issue Assets");
                 break;
             case "Lend":
-                new LendView();
+                ContentArea.Content = new LendView();
                 setHeaderText("Lend Assets");
                 break;
             case "Return":
-                new ReturnView();
+                ContentArea.Content = new ReturnView();
                 setHeaderText("Return Assets");
                 break;
         }

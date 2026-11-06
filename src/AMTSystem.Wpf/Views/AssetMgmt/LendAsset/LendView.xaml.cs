@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AMTSystem.Wpf.Views
+namespace AMTSystem.Wpf.Views.AssetMgmt
 {
     /// <summary>
-    /// Interaction logic for IssueView.xaml
+    /// Interaction logic for LendView.xaml
     /// </summary>
-    public partial class IssueView : Page
+    public partial class LendView : UserControl
     {
-        public IssueView()
+        public LendView()
         {
             InitializeComponent();
         }

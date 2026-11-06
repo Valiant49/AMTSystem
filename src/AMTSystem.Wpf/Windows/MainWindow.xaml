@@ -158,7 +158,7 @@
             x:Name="TopBar"
             Grid.Row="0"
             Grid.Column="1"
-            Margin="4,4,4,4">
+            Margin="16,4,16,4">
             <TextBlock
                 x:Name="HeaderText"
                 VerticalAlignment="Center"
@@ -170,7 +170,7 @@
             x:Name="ContentArea"
             Grid.Row="1"
             Grid.Column="1"
-            Margin="16"
+            Margin="16,8,16,8"
             Background="Green" />
     </Grid>
 </Window>

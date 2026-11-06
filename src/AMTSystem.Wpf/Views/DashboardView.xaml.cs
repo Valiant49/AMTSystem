@@ -11,16 +11,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AMTSystem.Wpf.Views
+using AMTSystem.Wpf.Windows;
+
+namespace AMTSystem.Wpf.Views.AssetMgmt;
+/// <summary>
+/// Interaction logic for DashboardView.xaml
+/// </summary>
+public partial class DashboardView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for LendView.xaml
-    /// </summary>
-    public partial class LendView : Page
+    //private readonly Window MainWindow;
+
+    public DashboardView()
     {
-        public LendView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
+
 }
