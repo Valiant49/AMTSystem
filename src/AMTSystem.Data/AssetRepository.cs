@@ -50,7 +50,7 @@ public class AssetRepository
              ") " + 
 
              "SELECT a.id, a.name, a.tag, a.serial_number, stat.status, a.category_id, " +
-             "   cp.full_path AS category_name, a.components, ac.condition " +
+             "   cp.full_path AS category_name, a.components, ac.condition, a.manufacturer, a.model " +
              "FROM assets a " +
              "LEFT JOIN cat_path cp ON cp.id = a.category_id " +
              "LEFT JOIN asset_statuses stat ON stat.id = a.status_id " + 
@@ -67,6 +67,8 @@ public class AssetRepository
             a.Category_String = reader.GetString("category_name");
             a.Condition_String = reader.GetString("condition");
             a.Status_String = reader.GetString("status");
+            a.Manufacturer = reader.GetString("manufacturer");
+            a.Model = reader.GetString("model");
             // checks first if the record's attribute is null; if so, attribute is null, else get the value
             a.Components = reader.IsDBNull("components") ? null : reader.GetString("components");
             assets.Add(a);

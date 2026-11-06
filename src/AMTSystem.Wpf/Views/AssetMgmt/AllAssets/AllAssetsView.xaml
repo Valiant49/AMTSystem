@@ -44,6 +44,14 @@
                     Header="Condition" />
                 <DataGridTextColumn
                     Width="*"
+                    Binding="{Binding Manufacturer}"
+                    Header="Manufacturer" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Model}"
+                    Header="Model" />
+                <DataGridTextColumn
+                    Width="*"
                     Binding="{Binding Components}"
                     Header="Components" />
             </DataGrid.Columns>
