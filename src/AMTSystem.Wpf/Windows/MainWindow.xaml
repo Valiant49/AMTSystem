@@ -6,8 +6,8 @@
     xmlns:local="clr-namespace:AMTSystem.Wpf.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="AMTSystem"
-    Width="1280"
-    Height="720"
+    Width="1600"
+    Height="900"
     mc:Ignorable="d">
     <Window.Resources>
         <!--  Style for sidebar buttons  -->
