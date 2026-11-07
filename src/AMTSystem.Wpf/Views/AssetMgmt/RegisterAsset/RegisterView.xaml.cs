@@ -1,11 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-using MySqlConnector;
-
-using AMTSystem.Core.Models;
 using AMTSystem.Core.Helpers;
+using AMTSystem.Core.Models;
 using AMTSystem.Data;
+
+using MySqlConnector;
 
 namespace AMTSystem.Wpf.Views.AssetMgmt;
 
@@ -28,17 +28,6 @@ public partial class RegisterView : UserControl
         LoadModels();
     }
 
-    //private void Next_Click(object sender, RoutedEventArgs e)
-    //{
-    //    if (NextClicked != null)
-    //    {
-    //        NextClicked(this, EventArgs.Empty);
-    //    }
-    //}
-
-
-
-
     private void Submit_Clicked(object sender, RoutedEventArgs e)
     {
         AssetDraft draft = (AssetDraft)DataContext;
@@ -58,10 +47,10 @@ public partial class RegisterView : UserControl
             AssetRepository.Insert(draft);
             SubmitClicked?.Invoke(this, EventArgs.Empty);
         } 
-        //catch (MySqlException ex) when (ex.ErrorCode == MySqlErrorCode.DuplicateKeyEntry)
-        //{
-        //    MessageBox.Show("An asset with that serial number already exists.");
-        //} 
+        catch (MySqlException ex) when (ex.ErrorCode == MySqlErrorCode.DuplicateKeyEntry)
+        {
+            MessageBox.Show("An asset with that serial number already exists.");
+        } 
         catch (MySqlException ex)
         {
             MessageBox.Show("Database error: " + ex.Message);

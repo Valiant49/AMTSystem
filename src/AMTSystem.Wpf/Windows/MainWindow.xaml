@@ -90,6 +90,7 @@
                         Style="{StaticResource NavButton}"
                         Tag="Dashboard" />
 
+                    <!--  Asset Management Buttons  -->
                     <TextBlock Style="{StaticResource NavHeader}" Text="ASSET MANAGEMENT" />
                     <Button
                         Click="Nav_Click"
@@ -117,6 +118,7 @@
                         Style="{StaticResource NavButton}"
                         Tag="Return" />
 
+                    <!--  Report and Analytics  -->
                     <TextBlock Style="{StaticResource NavHeader}" Text="REPORT &amp; ANALYTICS" />
                     <Button
                         Click="Nav_Click"
@@ -129,6 +131,30 @@
                         Style="{StaticResource NavButton}"
                         Tag="GeneratedDocs" />
 
+                    <!--  Personnel Management  -->
+                    <TextBlock Style="{StaticResource NavHeader}" Text="PERSONNEL INFORMATION" />
+                    <Button
+                        Click="Nav_Click"
+                        Content="All Personnel"
+                        Style="{StaticResource NavButton}"
+                        Tag="AllPersonnel" />
+                    <Button
+                        Click="Nav_Click"
+                        Content="Add Personnel Info"
+                        Style="{StaticResource NavButton}"
+                        Tag="AddPersonnel" />
+                    <Button
+                        Click="Nav_Click"
+                        Content="Edit Personnel Info"
+                        Style="{StaticResource NavButton}"
+                        Tag="EditPersonnel" />
+                    <Button
+                        Click="Nav_Click"
+                        Content="Add Department"
+                        Style="{StaticResource NavButton}"
+                        Tag="AddDepartment" />
+
+                    <!--  User Management  -->
                     <TextBlock Style="{StaticResource NavHeader}" Text="USER MANAGEMENT" />
                     <Button
                         Click="Nav_Click"

@@ -74,12 +74,6 @@
         </Grid>
 
         <DockPanel Grid.Row="1">
-            <!--<Button
-                Padding="64,16"
-                HorizontalAlignment="Right"
-                Click="Next_Click"
-                Content="Next" />-->
-
             <Button
                 Padding="64,16"
                 HorizontalAlignment="Right"

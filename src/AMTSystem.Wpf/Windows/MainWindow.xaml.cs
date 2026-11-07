@@ -3,6 +3,8 @@ using System.Windows.Controls;
 
 using AMTSystem.Core.Models;
 using AMTSystem.Wpf.Views.AssetMgmt;
+using AMTSystem.Wpf.Views.PersonnelMgmt;
+using AMTSystem.Wpf.Views.PersonnelMgmt.Departments;
 
 namespace AMTSystem.Wpf.Windows;
 /// <summary>
@@ -32,6 +34,7 @@ public partial class MainWindow : Window
                 ContentArea.Content = new DashboardView();
                 setHeaderText("Dashboard");
                 break;
+            // Asset Management
             case "AllAssets":
                 ContentArea.Content = new AllAssetsView();
                 setHeaderText("All Assets");
@@ -54,6 +57,21 @@ public partial class MainWindow : Window
                 ContentArea.Content = new ReturnView();
                 setHeaderText("Return Assets");
                 break;
+            // Personnel Management
+            case "AddPersonnel":
+                ContentArea.Content = new AddPersonnel();
+                setHeaderText("Add Personnel Record");
+                break;
+            case "EditPersonnel":
+                ContentArea.Content = new EditPersonnel();
+                setHeaderText("Edit Personnel Information");
+                break;
+            case "AddDepartment":
+                AddDepartment dept_form = new AddDepartment();
+                dept_form.DeptSubmit_Clicked += Dept_Submit;
+                ContentArea.Content = dept_form;
+                setHeaderText("Add Department Record");
+                break;
         }
     }
 
@@ -66,5 +84,11 @@ public partial class MainWindow : Window
     {
         ContentArea.Content = new AllAssetsView();
         setHeaderText("All Assets");
+    }
+
+    private void Dept_Submit(object? sender, EventArgs e)
+    {
+        ContentArea.Content = new AddDepartment();
+        setHeaderText("Add Department Record");
     }
 }
