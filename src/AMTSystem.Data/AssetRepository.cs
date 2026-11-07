@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Xml.Linq;
 
 using AMTSystem.Core.Models;
 
@@ -12,17 +13,31 @@ namespace AMTSystem.Data;
 public class AssetRepository
 {
     private const string ConnectionString = "Server=localhost;Port=3306;Database=amtsystem;User ID=root;Password=";
-    public void Insert(AssetDraft draft)
+    public static long Insert(AssetDraft draft)
     {
-        //using var conn = new MySqlConnection(ConnectionString);
-        //conn.Open();
+        using var conn = new MySqlConnection(ConnectionString);
+        conn.Open();
 
-        //using var cmd = conn.CreateCommand();
-        //cmd.CommandText =
-        //    "INSERT INTO assets (name, tag, category_id, status_id, condition_id) " + 
-        //    "VALUES (@name, @tag, @category_id, @status_id, @condition_id)";
-        //cmd.Parameters.AddWithValue("@name", draft.Name);
-        //incomplete
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText =
+            //"INSERT INTO assets (name, tag, category_id, status_id, condition_id) " +
+            //"VALUES (@name, @tag, @category_id, @status_id, @condition_id)";
+            "INSERT into assets(name, tag, category_id, status_id, condition_id, description, serial_number, components, manufacturer, model) " +
+            "VALUES (@name, @tag, @category_id, @status_id, @condition_id, @description, @serial_number, @components, @manufacturer, @model)";
+
+        cmd.Parameters.AddWithValue("@name", draft.Name);
+        cmd.Parameters.AddWithValue("@tag", draft.Tag);
+        cmd.Parameters.AddWithValue("@category_id", draft.CategoryId);
+        cmd.Parameters.AddWithValue("@status_id", draft.StatusId);
+        cmd.Parameters.AddWithValue("@condition_id", draft.CategoryId);
+        cmd.Parameters.AddWithValue("@description", draft.Description);
+        cmd.Parameters.AddWithValue("@serial_number", draft.SerialNumber);
+        cmd.Parameters.AddWithValue("@components", draft.Components);
+        cmd.Parameters.AddWithValue("@manufacturer", draft.Manufacturer);
+        cmd.Parameters.AddWithValue("@model", draft.Model);
+
+        cmd.ExecuteNonQuery();
+        return cmd.LastInsertedId;
     }
 
     public static List<Asset> GetAll()

@@ -44,12 +44,12 @@
                     SelectedValue="{Binding CategoryId}"
                     SelectedValuePath="Id" />
 
-                <!--<TextBlock Text="Status" />
+                <TextBlock Text="Status" />
                 <ComboBox
                     x:Name="StatusBox"
                     DisplayMemberPath="Name"
-                    SelectedValue="{Binding CategoryId}"
-                    SelectedValuePath="Id" />-->
+                    SelectedValue="{Binding StatusId}"
+                    SelectedValuePath="Id" />
 
                 <TextBlock Text="Condition" />
                 <ComboBox
@@ -74,11 +74,17 @@
         </Grid>
 
         <DockPanel Grid.Row="1">
-            <Button
+            <!--<Button
                 Padding="64,16"
                 HorizontalAlignment="Right"
                 Click="Next_Click"
-                Content="Next" />
+                Content="Next" />-->
+
+            <Button
+                Padding="64,16"
+                HorizontalAlignment="Right"
+                Click="Submit_Clicked"
+                Content="Submit" />
         </DockPanel>
 
 

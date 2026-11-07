@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
+using AMTSystem.Core.Models;
 using AMTSystem.Wpf.Views.AssetMgmt;
 
 namespace AMTSystem.Wpf.Windows;
@@ -36,8 +37,9 @@ public partial class MainWindow : Window
                 setHeaderText("All Assets");
                 break;
             case "Register":
-                //ContentArea.Content = new RegisterView(new Core.Models.AssetDraft());
-                ContentArea.Content = new RegisterFlowView();
+                RegisterView form = new RegisterView(new AssetDraft());
+                form.SubmitClicked += Register_Submitted;
+                ContentArea.Content = form;
                 setHeaderText("Register Assets");
                 break;
             case "Issue":
@@ -53,5 +55,16 @@ public partial class MainWindow : Window
                 setHeaderText("Return Assets");
                 break;
         }
+    }
+
+    private void Form_SubmitClicked(object? sender, EventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void Register_Submitted(object? sender, EventArgs e)
+    {
+        ContentArea.Content = new AllAssetsView();
+        setHeaderText("All Assets");
     }
 }
