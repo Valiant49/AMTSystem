@@ -59,7 +59,9 @@ public partial class MainWindow : Window
                 break;
             // Personnel Management
             case "AddPersonnel":
-                ContentArea.Content = new AddPersonnel();
+                AddPersonnel addPersonnel = new AddPersonnel();
+                addPersonnel.SubmitClicked += Personnel_Submit;
+                ContentArea.Content = addPersonnel;
                 setHeaderText("Add Personnel Record");
                 break;
             case "EditPersonnel":
@@ -90,5 +92,11 @@ public partial class MainWindow : Window
     {
         ContentArea.Content = new AddDepartment();
         setHeaderText("Add Department Record");
+    }
+
+    private void Personnel_Submit(object? sender, EventArgs e)
+    {
+        ContentArea.Content = new AddPersonnel();
+        setHeaderText("Add Personnel Record");
     }
 }

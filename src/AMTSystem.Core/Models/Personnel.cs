@@ -8,7 +8,35 @@ public  class Personnel
 {
     public string Id { get; set; }
     public string FirstName { get; set; }
-    public string MiddleName { get; set; }
+    public string? MiddleName { get; set; }
     public string LastName { get; set; }
+    public string EmployeeNo { get; set; }
+    public string AccountStatus { get; set; }
+    public int DepartmentId { get; set; }
     public string Department { get; set; }
+
+    public List<string> Validate()
+    {
+        List<string> errors = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(FirstName))
+            errors.Add("First name is required.");
+
+        if (FirstName.Length > 50)
+            errors.Add("First name must be less than 50 characters");
+
+        if (string.IsNullOrWhiteSpace(LastName))
+            errors.Add("Last name is required.");
+
+        if (MiddleName?.Length > 50)
+            errors.Add("Middle name must be less than 50 characters.");
+
+        if (LastName.Length > 50)
+            errors.Add("Last name must be less than 50 characters.");
+
+        if (string.IsNullOrWhiteSpace(EmployeeNo))
+            errors.Add("Employee number is required.");
+
+        return errors;
+    }
 }
