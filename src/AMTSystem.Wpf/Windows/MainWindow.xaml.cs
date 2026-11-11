@@ -5,6 +5,7 @@ using AMTSystem.Core.Models;
 using AMTSystem.Wpf.Views.AssetMgmt;
 using AMTSystem.Wpf.Views.PersonnelMgmt;
 using AMTSystem.Wpf.Views.PersonnelMgmt.Departments;
+using AMTSystem.Wpf.Views.UserMgmt;
 
 namespace AMTSystem.Wpf.Windows;
 /// <summary>
@@ -58,6 +59,11 @@ public partial class MainWindow : Window
                 setHeaderText("Return Assets");
                 break;
             // Personnel Management
+            case "AllPersonnel":
+                AllPersonnel allPersonnel = new AllPersonnel();
+                ContentArea.Content = allPersonnel;
+                setHeaderText("All Personnel Records");
+                break;
             case "AddPersonnel":
                 AddPersonnel addPersonnel = new AddPersonnel();
                 addPersonnel.SubmitClicked += Personnel_Submit;
@@ -73,6 +79,13 @@ public partial class MainWindow : Window
                 dept_form.DeptSubmit_Clicked += Dept_Submit;
                 ContentArea.Content = dept_form;
                 setHeaderText("Add Department Record");
+                break;
+            // System Users
+            case "SystemUsers":
+                AllUsers all_users = new AllUsers();
+                //line for some event handler thing
+                ContentArea.Content = all_users;
+                setHeaderText("All Users");
                 break;
         }
     }

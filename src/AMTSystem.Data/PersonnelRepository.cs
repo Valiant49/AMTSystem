@@ -34,6 +34,46 @@ public class PersonnelRepository
         return list;
     }
 
+    public static List<Personnel> GetPersonnels()
+    {
+        List<Personnel> list = new List<Personnel>();
+
+        using var conn = new MySqlConnection(ConnectionString);
+        conn.Open();
+
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = 
+        """
+        SELECT p.id, p.first_name, p.middle_name, p.last_name,
+               p.employee_no, p.account_status, t.status AS status,
+               p.department AS department_id,
+               d.department AS department_name
+        FROM personnels p
+        JOIN departments d ON d.id = p.department
+        JOIN account_statuses t ON t.id = p.account_status  
+        ORDER BY p.last_name
+        """;
+
+
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            Personnel p = new Personnel(); 
+            p.Id = reader.GetInt32("id");
+            p.FirstName = reader.GetString("first_name");
+            p.MiddleName = reader.IsDBNull(reader.GetOrdinal("middle_name")) ? null : reader.GetString("middle_name");
+            p.LastName = reader.GetString("last_name");
+            p.AccountStatus = reader.GetInt32("account_status"); 
+            p.Status = reader.GetString("status");
+            p.DepartmentId = reader.GetInt32("department_id");
+            p.Department = reader.GetString("department_name");
+            p.EmployeeNo = reader.GetString("employee_no");
+            list.Add(p);
+        }
+
+        return list;
+    }
+
     public static long Insert_Department(string department)
     {
         using var conn = new MySqlConnection(ConnectionString);

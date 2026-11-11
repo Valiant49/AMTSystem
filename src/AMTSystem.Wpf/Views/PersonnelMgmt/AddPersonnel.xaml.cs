@@ -45,6 +45,7 @@ public partial class AddPersonnel : UserControl
         try
         {
             PersonnelRepository.Insert_Personnel(_personnel);
+            MessageBox.Show("Personnel record succesfully created.");
             SubmitClicked?.Invoke(this, EventArgs.Empty);
         }
         catch (MySqlException ex) when (ex.ErrorCode == MySqlErrorCode.DuplicateKeyEntry)

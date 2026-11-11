@@ -48,6 +48,6 @@ public partial class AddDepartment : UserControl
 
     private void LoadDepartments()
     {
-        PersonnelGrid.ItemsSource = PersonnelRepository.GetDepartments();
+        DepartmentGrid.ItemsSource = PersonnelRepository.GetDepartments();
     }
 }
