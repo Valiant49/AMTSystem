@@ -14,27 +14,29 @@ public class User
         .Where(s => !string.IsNullOrWhiteSpace(s)
         ));
     public string Username { get; set; }
-    private string PasswordHash { get; set; }
-    public int RoleNum { get; set; }
+    public string PasswordHash { get; set; }
+    public int RoleId { get; set; }
     public string Role { get; set; }
-    public int AccountStatus { get; set; }
+    public int StatusId { get; set; }
     public string Status { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime LastUpdatedAt { get; set; }
 
-    public static string? GenerateUsername(string firstname, string lastname)
+    public static string GenerateUsernameBase(string firstName, string lastName)
     {
-        string username = string.Empty;
-        int firstnameLength = 1;
-        int lastnameLength = 6;
+        var first = new string((firstName ?? "").Where(char.IsLetter).ToArray());
+        var last = new string((lastName ?? "").Where(char.IsLetter).ToArray());
 
-        if (string.IsNullOrEmpty(firstname) || string.IsNullOrEmpty(lastname)) {
-            return string.Empty;
-        }
+        if (first.Length == 0 || last.Length == 0) return string.Empty;
 
-        username = firstname[..firstnameLength] + lastname[..lastnameLength] + Random.Shared.Next(100);
+        return (first[..1] + last[..Math.Min(6, last.Length)]).ToLower();
+    }
 
-        return username;
+    // on save only
+    public static string GenerateUsername(string firstName, string lastName)
+    {
+        var b = GenerateUsernameBase(firstName, lastName);
+        return b.Length == 0 ? string.Empty : b + Random.Shared.Next(100);
     }
 
     public List<string> Validate()
@@ -56,17 +58,9 @@ public class User
         if (LastName.Length > 50)
             errors.Add("Last name must be less than 50 characters.");
 
+        if (RoleId == 0)
+            errors.Add("Please select a role for this user.");
+
         return errors;
-    }
-
-    public string HashPassword(string input)
-    {
-        string hashedPassword = input.Trim();
-
-        // continue with hashing + salting logic
-
-        input = hashedPassword;
-
-        return input;
     }
 }

@@ -35,11 +35,11 @@
                     Header="Status" />
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding CreatedAt}"
+                    Binding="{Binding CreatedAt, StringFormat='yyyy-MM-dd HH:mm'}"
                     Header="Created at" />
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding LastUpdatedAt}"
+                    Binding="{Binding LastUpdatedAt, StringFormat='{}{0:g}'}"
                     Header="Last updated on" />
             </DataGrid.Columns>
         </DataGrid>

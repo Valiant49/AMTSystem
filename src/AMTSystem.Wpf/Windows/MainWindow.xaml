@@ -163,6 +163,11 @@
                         Tag="SystemUsers" />
                     <Button
                         Click="Nav_Click"
+                        Content="Add System Users"
+                        Style="{StaticResource NavButton}"
+                        Tag="AddUsers" />
+                    <Button
+                        Click="Nav_Click"
                         Content="Roles and Permissions"
                         Style="{StaticResource NavButton}"
                         Tag="Roles" />

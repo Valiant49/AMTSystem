@@ -87,6 +87,13 @@ public partial class MainWindow : Window
                 ContentArea.Content = all_users;
                 setHeaderText("All Users");
                 break;
+            case "AddUsers":
+                AddUser add_user = new AddUser();
+                //line for some event handler thing
+                add_user.SubmitClick += User_Submit;
+                ContentArea.Content = add_user;
+                setHeaderText("Add System User");
+                break;
         }
     }
 
@@ -111,5 +118,11 @@ public partial class MainWindow : Window
     {
         ContentArea.Content = new AddPersonnel();
         setHeaderText("Add Personnel Record");
+    }
+
+    private void User_Submit(object? sender, EventArgs e)
+    {
+        ContentArea.Content = new AddUser();
+        setHeaderText("Add System User");
     }
 }
