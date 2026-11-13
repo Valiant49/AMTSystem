@@ -23,8 +23,9 @@ public partial class AllAssetsView : UserControl
         //throw new NotImplementedException();
         try
         {
-            AssetGrid.ItemsSource = AssetRepository.GetAll();
-        } catch (MySqlException ex)
+            AssetGrid.ItemsSource = AssetRepository.GetAllAssets();
+        } 
+        catch (MySqlException ex)
         {
             MessageBox.Show("Could not load assets: " + ex.Message);
         }

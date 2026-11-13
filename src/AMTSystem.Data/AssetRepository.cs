@@ -40,7 +40,7 @@ public class AssetRepository
         return cmd.LastInsertedId;
     }
 
-    public static List<Asset> GetAll()
+    public static List<Asset> GetAllAssets()
     {
         List<Asset> assets= new List<Asset>();
 
@@ -91,12 +91,12 @@ public class AssetRepository
         return assets;
     }
 
-    public static List<LookupItem> GetStatuses()
+    public static List<LookupItem> GetAssetStatuses()
     {
         return GetLookup("SELECT id, status AS name FROM asset_statuses ORDER BY status");
     }
 
-    public static List<LookupItem> GetCategories()
+    public static List<LookupItem> GetAssetCategories()
     {
         // full path ("Electronics > Laptop") so the dropdown shows the hierarchy
         return GetLookup(@"
@@ -112,12 +112,12 @@ public class AssetRepository
         SELECT id, full_path AS name FROM cat_path ORDER BY full_path");
     }
 
-    public static List<LookupItem> GetConditions()
+    public static List<LookupItem> GetAssetConditions()
     {
         return GetLookup("SELECT ac.id, ac.condition AS name FROM asset_conditions ac ORDER BY ac.condition");
     }
 
-    public static List<string> GetManufacturers()
+    public static List<string> GetAssetManufacturers()
     {
         List<string> items = new List<string>();
         using var conn = new MySqlConnection(ConnectionString);

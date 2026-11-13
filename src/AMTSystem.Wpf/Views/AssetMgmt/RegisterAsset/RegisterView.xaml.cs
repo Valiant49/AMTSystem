@@ -19,10 +19,10 @@ public partial class RegisterView : UserControl
     public RegisterView(AssetDraft draft)
     {
         InitializeComponent();
-        CategoryBox.ItemsSource = WithPrompt(AssetRepository.GetCategories(), "Select a category...");
-        StatusBox.ItemsSource = WithPrompt(AssetRepository.GetStatuses(), "Please select a status...");
-        ConditionBox.ItemsSource = WithPrompt(AssetRepository.GetConditions(), "Select a condition...");
-        ManufacturerBox.ItemsSource = AssetRepository.GetManufacturers();
+        CategoryBox.ItemsSource = WithPrompt(AssetRepository.GetAssetCategories(), "Select a category...");
+        StatusBox.ItemsSource = WithPrompt(AssetRepository.GetAssetStatuses(), "Please select a status...");
+        ConditionBox.ItemsSource = WithPrompt(AssetRepository.GetAssetConditions(), "Select a condition...");
+        ManufacturerBox.ItemsSource = AssetRepository.GetAssetManufacturers();
         
         DataContext = draft;
         LoadModels();
