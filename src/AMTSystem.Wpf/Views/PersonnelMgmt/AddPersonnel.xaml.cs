@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 using AMTSystem.Core.Models;
 using AMTSystem.Data;
@@ -44,7 +34,7 @@ public partial class AddPersonnel : UserControl
 
         try
         {
-            PersonnelRepository.Insert_Personnel(_personnel);
+            PersonnelRepository.InsertPersonnel(_personnel);
             MessageBox.Show("Personnel record succesfully created.");
             SubmitClicked?.Invoke(this, EventArgs.Empty);
         }

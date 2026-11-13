@@ -42,7 +42,7 @@ public class PersonnelRepository
         conn.Open();
 
         using var cmd = conn.CreateCommand();
-        cmd.CommandText = 
+        cmd.CommandText =
         """
         SELECT p.id, p.first_name, p.middle_name, p.last_name,
                p.employee_no, p.account_status, t.status AS status,
@@ -58,12 +58,12 @@ public class PersonnelRepository
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            Personnel p = new Personnel(); 
+            Personnel p = new Personnel();
             p.Id = reader.GetInt32("id");
             p.FirstName = reader.GetString("first_name");
             p.MiddleName = reader.IsDBNull(reader.GetOrdinal("middle_name")) ? null : reader.GetString("middle_name");
             p.LastName = reader.GetString("last_name");
-            p.AccountStatus = reader.GetInt32("account_status"); 
+            p.StatusId = reader.GetInt32("account_status");
             p.Status = reader.GetString("status");
             p.DepartmentId = reader.GetInt32("department_id");
             p.Department = reader.GetString("department_name");
@@ -74,7 +74,7 @@ public class PersonnelRepository
         return list;
     }
 
-    public static long Insert_Department(string department)
+    public static long InsertDepartment(string department)
     {
         using var conn = new MySqlConnection(ConnectionString);
         conn.Open();
@@ -87,7 +87,8 @@ public class PersonnelRepository
         cmd.ExecuteNonQuery();
         return cmd.LastInsertedId;
     }
-    public static long Insert_Personnel(Personnel personnel)
+
+    public static long InsertPersonnel(Personnel personnel)
     {
         using var conn = new MySqlConnection(ConnectionString);
         conn.Open();
@@ -107,4 +108,6 @@ public class PersonnelRepository
         cmd.ExecuteNonQuery();
         return cmd.LastInsertedId;
     }
+
+
 }

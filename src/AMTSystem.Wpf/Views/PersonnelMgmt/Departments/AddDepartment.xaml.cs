@@ -31,7 +31,7 @@ public partial class AddDepartment : UserControl
 
         try
         {
-            PersonnelRepository.Insert_Department(department_input);
+            PersonnelRepository.InsertDepartment(department_input);
             DeptInput.Clear();
             DeptSubmit_Clicked?.Invoke(this, new EventArgs());
 

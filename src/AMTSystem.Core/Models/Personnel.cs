@@ -14,7 +14,7 @@ public  class Personnel
         .Where(s => !string.IsNullOrWhiteSpace(s)
         ));
     public string EmployeeNo { get; set; }
-    public int AccountStatus { get; set; }
+    public int StatusId { get; set; }
     public string Status { get; set; }
     public int DepartmentId { get; set; }
     public string Department { get; set; }
