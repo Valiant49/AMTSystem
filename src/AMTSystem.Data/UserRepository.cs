@@ -120,4 +120,51 @@ public class UserRepository
         cmd.Parameters.AddWithValue("@u", username);
         return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
     }
+
+    public static User? GetByUsername(string username)
+    {
+        User user = new User();
+
+        using var conn = new MySqlConnection(ConnectionString);
+        conn.Open();
+
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+        SELECT u.id, u.first_name, u.middle_name, u.last_name, u.username, u.password_hash,
+               u.`role` AS role_id, ur.role, u.account_status, t.status
+        FROM users u
+        JOIN user_roles ur ON ur.id = u.`role`
+        JOIN account_statuses t ON t.id = u.account_status
+        WHERE u.username = @username
+        """;
+        cmd.Parameters.AddWithValue("@username", username);
+
+        using var r = cmd.ExecuteReader();
+        if (!r.Read()) return null;
+
+        return new User
+        {
+            Id = r.GetInt32("id"),
+            FirstName = r.GetString("first_name"),
+            MiddleName = r.IsDBNull(r.GetOrdinal("middle_name")) ? null : r.GetString("middle_name"),
+            LastName = r.GetString("last_name"),
+            Username = r.GetString("username"),
+            PasswordHash = r.GetString("password_hash"),
+            RoleId = r.GetInt32("role_id"),
+            Role = r.GetString("role"),
+            StatusId = r.GetInt32("account_status"),
+            Status = r.GetString("status")
+        };
+    }
+
+    public static void UpdatePasswordHash(int userId, string hash)
+    {
+        using var conn = new MySqlConnection(ConnectionString);
+        conn.Open();
+        using var cmd = new MySqlCommand(
+            "UPDATE users SET password_hash = @h, updated_at = UTC_TIMESTAMP() WHERE id = @id", conn);
+        cmd.Parameters.AddWithValue("@h", hash);
+        cmd.Parameters.AddWithValue("@id", userId);
+        cmd.ExecuteNonQuery();
+    }
 }
