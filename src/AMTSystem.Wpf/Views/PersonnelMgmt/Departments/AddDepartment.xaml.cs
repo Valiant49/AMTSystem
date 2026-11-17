@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-using AMTSystem.Data;
+using AMTSystem.Data.Repositories;
 
 using MySqlConnector;
 

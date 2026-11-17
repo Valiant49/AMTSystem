@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
+using AMTSystem.Core;
 using AMTSystem.Core.Models;
 using AMTSystem.Wpf.Views.AssetMgmt;
 using AMTSystem.Wpf.Views.PersonnelMgmt;
@@ -17,6 +18,12 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         ContentArea.Content = new DashboardView();
+        //AddDepartment.Visibility = Session.IsAdmin ? Visibility.Visible : Visibility.Collapsed;
+
+        if (!Session.IsAdmin)
+        {
+            AddDepartment.Visibility = Visibility.Collapsed;
+        }
 
     }
 

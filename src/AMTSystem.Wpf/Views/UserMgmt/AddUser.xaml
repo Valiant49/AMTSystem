@@ -92,11 +92,11 @@
                     Text="{Binding CreatedAt, Mode=OneWay, StringFormat=g}" />
 
                 <TextBlock Text="Updated At" />
-                <TextBox
+                <!--<TextBox
                     x:Name="UpdatedAtBox"
                     Margin="0,0,4,8"
                     IsReadOnly="True"
-                    Text="{Binding UpdatedAt, Mode=OneWay, StringFormat=g}" />
+                    Text="{Binding UpdatedAt, Mode=OneWay, StringFormat=g}" />-->
             </StackPanel>
         </Grid>
 

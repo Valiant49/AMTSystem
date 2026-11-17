@@ -20,4 +20,10 @@ namespace AMTSystem.Core.Models
         public string Manufacturer { get; set; } = string.Empty;
         public string Model {  get; set; } = string.Empty;
     }
+
+    public class AssetCondition
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+    }
 }

@@ -5,7 +5,7 @@ using AMTSystem.Core.Models;
 
 using MySqlConnector;
 
-namespace AMTSystem.Data;
+namespace AMTSystem.Data.Repositories;
 
 public class UserRepository
 {

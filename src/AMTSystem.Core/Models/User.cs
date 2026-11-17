@@ -10,9 +10,11 @@ public class User
     public string FirstName { get; set; }
     public string MiddleName { get; set; }
     public string LastName { get; set; }
-    public string FullName => string.Join(" ", new[] { FirstName, MiddleName, LastName }
-        .Where(s => !string.IsNullOrWhiteSpace(s)
-        ));
+    public string FullName => string.Join(" ", new[] { 
+        FirstName, 
+        !string.IsNullOrWhiteSpace(MiddleName) ? $"{MiddleName.Trim()[0]}." : null,
+        LastName 
+    }.Where(s => !string.IsNullOrWhiteSpace(s)));
     public string Username { get; set; }
     public string PasswordHash { get; set; }
     public int RoleId { get; set; }

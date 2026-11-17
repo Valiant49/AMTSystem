@@ -1,5 +1,5 @@
 ﻿using AMTSystem.Core.Models;
-using AMTSystem.Data;
+using AMTSystem.Data.Repositories;
 
 namespace AMTSystem.Core;
 

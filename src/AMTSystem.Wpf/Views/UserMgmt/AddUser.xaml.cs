@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 using AMTSystem.Core;
 using AMTSystem.Core.Models;
-using AMTSystem.Data;
+using AMTSystem.Data.Repositories;
 
 using MySqlConnector;
 
@@ -85,7 +85,6 @@ namespace AMTSystem.Wpf.Views.UserMgmt
             RoleBox.Text = "Please select a role...";
             AccountStatusBox.Text = "Please select a status...";
             CreatedAtBox.Clear();
-            UpdatedAtBox.Clear();
         }
 
         private void NameBox_TextChanged(object sender, RoutedEventArgs e)

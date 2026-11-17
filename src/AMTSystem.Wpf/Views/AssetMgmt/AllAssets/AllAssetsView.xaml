@@ -17,14 +17,13 @@
             CanUserAddRows="False"
             IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Id}" Header="ID" />
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding Name}"
                     Header="Name" />
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding SerialNumber}"
+                    Binding="{Binding Tag}"
                     Header="Tag" />
                 <DataGridTextColumn
                     Width="*"

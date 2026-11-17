@@ -149,6 +149,7 @@
                         Style="{StaticResource NavButton}"
                         Tag="EditPersonnel" />
                     <Button
+                        x:Name="AddDepartment"
                         Click="Nav_Click"
                         Content="Add Department"
                         Style="{StaticResource NavButton}"
@@ -189,13 +190,15 @@
             x:Name="TopBar"
             Grid.Row="0"
             Grid.Column="1"
-            Margin="16,4,16,4">
+            Margin="16,4,16,8">
             <TextBlock
                 x:Name="HeaderText"
                 VerticalAlignment="Center"
                 FontSize="24"
                 Text="Welcome, user." />
         </ContentControl>
+
+        <Separator Grid.Column="1" VerticalAlignment="Bottom" />
 
         <ContentControl
             x:Name="ContentArea"

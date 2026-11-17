@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using AMTSystem.Data;
+using AMTSystem.Data.Repositories;
 
 using MySqlConnector;
 

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.Data;
-using System.Text;
-using System.Xml.Linq;
 
 using AMTSystem.Core.Models;
 
 using MySqlConnector;
 
-namespace AMTSystem.Data;
+namespace AMTSystem.Data.Repositories;
 
-public class AssetRepository
+public static class AssetRepository
 {
     private const string ConnectionString = "Server=localhost;Port=3306;Database=amtsystem;User ID=root;Password=";
     public static long Insert(AssetDraft draft)
@@ -65,7 +62,7 @@ public class AssetRepository
              ") " + 
 
              "SELECT a.id, a.name, a.tag, a.serial_number, stat.status, a.category_id, " +
-             "   cp.full_path AS category_name, a.components, ac.condition, a.manufacturer, a.model " +
+             "   cp.full_path AS category_name, a.components, a.condition_id, ac.condition, a.manufacturer, a.model " +
              "FROM assets a " +
              "LEFT JOIN cat_path cp ON cp.id = a.category_id " +
              "LEFT JOIN asset_statuses stat ON stat.id = a.status_id " + 
@@ -80,6 +77,7 @@ public class AssetRepository
             a.Tag = reader.GetString("tag");
             a.SerialNumber = reader.GetString("serial_number");
             a.Category_String = reader.GetString("category_name");
+            a.Condition_Id = reader.GetInt32("condition_id");
             a.Condition_String = reader.GetString("condition");
             a.Status_String = reader.GetString("status");
             a.Manufacturer = reader.GetString("manufacturer");
@@ -89,6 +87,57 @@ public class AssetRepository
             assets.Add(a);
         }
         return assets;
+    }
+
+    public static List<Asset> GetAvailableAssets()
+    {
+        List<Asset> availableAssets = new List<Asset>();
+
+        using var conn = new MySqlConnection(ConnectionString);
+        conn.Open();
+
+        using var cmd = conn.CreateCommand();
+
+        cmd.CommandText =
+            "WITH RECURSIVE cat_path AS (" +
+                "SELECT id, category AS full_path " +
+                "FROM asset_categories " +
+                "WHERE parent_category_id IS NULL " +
+
+                "UNION ALL " +
+
+                "SELECT c.id, CONCAT(cp.full_path, ' > ', c.category) " +
+                "FROM asset_categories c " +
+                "JOIN cat_path cp ON c.parent_category_id = cp.id " +
+            ") " +
+
+            "SELECT a.id, a.name, a.tag, a.serial_number, stat.status, a.category_id, " +
+            "   cp.full_path AS category_name, a.components, a.condition_id, ac.condition, a.manufacturer, a.model " +
+            "FROM assets a " +
+            "LEFT JOIN cat_path cp ON cp.id = a.category_id " +
+            "LEFT JOIN asset_statuses stat ON stat.id = a.status_id " +
+            "LEFT JOIN asset_conditions ac ON ac.id = a.condition_id " +
+            "WHERE a.status_id = 1;";
+
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            Asset a = new Asset();
+            a.Id = reader.GetInt32("id");
+            a.Name = reader.GetString("name");
+            a.Tag = reader.GetString("tag");
+            a.SerialNumber = reader.GetString("serial_number");
+            a.Category_String = reader.GetString("category_name");
+            a.Condition_Id = reader.GetInt32("condition_id");
+            a.Condition_String = reader.GetString("condition");
+            a.Status_String = reader.GetString("status");
+            a.Manufacturer = reader.GetString("manufacturer");
+            a.Model = reader.GetString("model");
+            // checks first if the record's attribute is null; if so, attribute is null, else get the value
+            a.Components = reader.IsDBNull("components") ? null : reader.GetString("components");
+            availableAssets.Add(a);
+        }
+        return availableAssets;
     }
 
     public static List<LookupItem> GetAssetStatuses()
@@ -176,6 +225,5 @@ public class AssetRepository
         }
         return items;
     }
-
 
 }

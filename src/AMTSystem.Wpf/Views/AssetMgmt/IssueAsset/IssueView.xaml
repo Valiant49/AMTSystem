@@ -3,19 +3,212 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:AMTSystem.Wpf.Views"
+    xmlns:local="clr-namespace:AMTSystem.Wpf.Views.AssetMgmt"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
     <Grid>
-        <TextBlock
-            Margin="49,38,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Text="This is the Issue Assets."
-            TextWrapping="Wrap" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
+        <!--  Header  -->
+        <Grid Grid.Row="0" Margin="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="Issuing Officer: " />
+                <TextBlock x:Name="IssuingOfficerText" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center" Text="Date Issued: " />
+                <DatePicker x:Name="DateIssuedPicker" Width="200" />
+            </StackPanel>
+        </Grid>
+
+        <!--  Tables  -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  Personnel  -->
+            <DockPanel Grid.Column="0" Margin="8,6">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="Personnel" />
+                    <TextBlock Text="Search personnel" />
+                    <TextBox x:Name="PersonnelSearchBox" TextChanged="PersonnelSearchBox_TextChanged" />
+                </StackPanel>
+                <Button
+                    x:Name="SelectPersonnelButton"
+                    Margin="0,8,0,0"
+                    Click="SelectPersonnelButton_Click"
+                    Content="Select Personnel"
+                    DockPanel.Dock="Bottom" />
+
+                <DataGrid
+                    x:Name="PersonnelGrid"
+                    Margin="0,10,0,0"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserReorderColumns="False"
+                    CanUserResizeColumns="False"
+                    IsReadOnly="True"
+                    SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding EmployeeNo}"
+                            Header="Emp. No." />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding FullName}"
+                            Header="Name" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Department}"
+                            Header="Department" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+
+            </DockPanel>
+
+            <!--  Assets  -->
+            <DockPanel Grid.Column="1" Margin="8,6">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="Available Assets" />
+                    <TextBlock Text="Search assets" />
+                    <TextBox x:Name="AssetSearchBox" KeyDown="AssetSearchBox_KeyDown" />
+                </StackPanel>
+
+                <Button
+                    x:Name="AddAssetButton"
+                    Margin="0,8,0,0"
+                    Click="AddAssetButton_Click"
+                    Content="Add Asset"
+                    DockPanel.Dock="Bottom" />
+
+                <DataGrid
+                    x:Name="AvailableAssetGrid"
+                    Margin="0,10,0,0"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserReorderColumns="False"
+                    CanUserResizeColumns="False"
+                    IsReadOnly="True"
+                    SelectionMode="Extended">
+                    <!--  SelectionChanged="AvailableAssetGrid_SelectionChanged"  -->
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Tag}"
+                            Header="Tag" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Name}"
+                            Header="Asset Name" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding SerialNumber}"
+                            Header="Serial No." />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Category_String}"
+                            Header="Category" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Condition_String}"
+                            Header="Condition" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Manufacturer}"
+                            Header="Manufacturer" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Model}"
+                            Header="Model" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Grid>
+
+        <!--  Review  -->
+        <StackPanel Grid.Row="2" Margin="8,6">
+            <Separator Margin="0,0,0,8" />
+            <TextBlock Text="Review" />
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Issue to: " />
+                <TextBlock x:Name="ReviewPersonnelText" Text="(no personnel selected)" />
+            </StackPanel>
+
+            <TextBlock x:Name="ReviewCountText" Text="Assets to issue: 0" />
+
+            <DataGrid
+                x:Name="ReviewGrid"
+                MaxHeight="150"
+                Margin="0,6,0,0"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserReorderColumns="False"
+                IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="Auto"
+                        Binding="{Binding Tag}"
+                        Header="Tag" />
+                    <DataGridTextColumn
+                        Width="Auto"
+                        Binding="{Binding Name}"
+                        Header="Asset Name" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Category_String}"
+                        Header="Category" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Model}"
+                        Header="Model" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Condition_String}"
+                        Header="Condition" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <TextBlock Margin="0,6,0,0" Text="Remarks" />
+            <TextBox x:Name="RemarksBox" />
+        </StackPanel>
+
+        <!--  Actions  -->
+        <DockPanel
+            Grid.Row="3"
+            Margin="8"
+            VerticalAlignment="Bottom"
+            LastChildFill="False">
+            <Button
+                x:Name="IssueButton"
+                Padding="64,16"
+                Click="IssueButton_Click"
+                Content="Issue Assets"
+                DockPanel.Dock="Right" />
+            <Button
+                Margin="0,0,8,0"
+                Padding="64,16"
+                Click="CancelButton_Click"
+                Content="Cancel"
+                DockPanel.Dock="Right" />
+        </DockPanel>
     </Grid>
 </UserControl>

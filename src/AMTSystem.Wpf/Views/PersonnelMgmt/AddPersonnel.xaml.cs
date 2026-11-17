@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 
 using AMTSystem.Core.Models;
-using AMTSystem.Data;
+using AMTSystem.Data.Repositories;
 
 using MySqlConnector;
 
