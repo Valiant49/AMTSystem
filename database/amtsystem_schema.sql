@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 04, 2026 at 11:36 AM
+-- Generation Time: Nov 18, 2026 at 07:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `AMTSystem`
+-- Database: `amtsystem`
 --
 
 -- --------------------------------------------------------
@@ -57,18 +57,25 @@ CREATE TABLE `assets` (
   `condition_id` int(11) NOT NULL DEFAULT 1,
   `description` text DEFAULT NULL,
   `serial_number` varchar(100) DEFAULT NULL,
-  `components` text DEFAULT NULL
+  `components` text DEFAULT NULL,
+  `manufacturer` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `assets`
 --
 
-INSERT INTO `assets` (`id`, `name`, `tag`, `category_id`, `parent_asset_id`, `status_id`, `condition_id`, `description`, `serial_number`, `components`) VALUES
-(1, 'System Unit', 'AST-001', 2, NULL, 1, 2, 'Main computer system unit', 'SN-001', NULL),
-(2, 'Motherboard', 'AST-002', 2, NULL, 1, 2, 'System unit motherboard', NULL, NULL),
-(3, 'RAM', 'AST-003', 2, NULL, 1, 2, 'System unit memory', NULL, NULL),
-(4, 'Storage', 'AST-004', 2, NULL, 1, 2, 'System unit storage', NULL, NULL);
+INSERT INTO `assets` (`id`, `name`, `tag`, `category_id`, `parent_asset_id`, `status_id`, `condition_id`, `description`, `serial_number`, `components`, `manufacturer`, `model`) VALUES
+(1, 'System Unit', 'AST-001', 2, NULL, 3, 2, 'Main computer system unit', 'SN-001', 'RAM, HDD, Fan', 'Dell', 'abc'),
+(2, 'Motherboard', 'AST-002', 2, NULL, 1, 2, 'System unit motherboard', 'SN-002', NULL, 'AMD', 'def'),
+(3, 'RAM', 'AST-003', 2, NULL, 1, 2, 'System unit memory', 'SN-003', NULL, 'Samsung', 'ghi'),
+(4, 'Storage', 'AST-004', 2, NULL, 1, 2, 'System unit storage', 'SN-004', NULL, 'SanDisk', 'mno'),
+(5, 'Test Laptop', 'TST-001', 1, NULL, 1, 2, NULL, 'SN-005', NULL, 'Dell', 'mno'),
+(6, 'Test Monitor', 'TST-002', 1, NULL, 1, 2, NULL, 'SN-006', NULL, 'HP', 'xyz'),
+(8, 'Acer Nitro Laptop', 'AST-0008', 2, NULL, 2, 2, 'laptop', '1234567890', 'something', 'Acer', 'ANV-15-41'),
+(19, 'phone', '93526962', 4, NULL, 2, 4, 'phone', '12345678901', 'phone1', 'Tecno', 'KJ5'),
+(20, 'something', '46025178', 2, NULL, 1, 2, 'jsndkjns', '12345678jkjn', 'something1', 'Dell', 'mno');
 
 -- --------------------------------------------------------
 
@@ -144,6 +151,7 @@ INSERT INTO `asset_statuses` (`id`, `status`) VALUES
 
 CREATE TABLE `asset_transactions` (
   `id` int(11) NOT NULL,
+  `batch_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `personnel_id` int(11) NOT NULL,
   `asset_id` int(11) NOT NULL,
@@ -160,8 +168,34 @@ CREATE TABLE `asset_transactions` (
 -- Dumping data for table `asset_transactions`
 --
 
-INSERT INTO `asset_transactions` (`id`, `user_id`, `personnel_id`, `asset_id`, `transaction_date`, `remarks`, `transaction_type`, `returned_at`, `asset_condition_at_transaction`, `asset_condition_at_return`) VALUES
-(1, 1, 1, 1, '2026-11-03 13:07:23', 'Sample lending transaction', 'Lent', NULL, 2, NULL);
+INSERT INTO `asset_transactions` (`id`, `batch_id`, `user_id`, `personnel_id`, `asset_id`, `transaction_date`, `remarks`, `transaction_type`, `returned_at`, `asset_condition_at_transaction`, `asset_condition_at_return`) VALUES
+(1, 1, 1, 1, 1, '2026-11-03 13:07:23', 'Sample lending transaction', 'Lent', NULL, 2, NULL),
+(14, 2, 6, 3, 5, '2026-11-17 14:30:51', NULL, 'Issued', NULL, 2, NULL),
+(15, 3, 6, 1, 19, '2026-11-17 15:02:28', NULL, 'Issued', NULL, 4, NULL),
+(16, 3, 6, 1, 8, '2026-11-17 15:02:28', NULL, 'Issued', NULL, 2, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `asset_transactions_batches`
+--
+
+CREATE TABLE `asset_transactions_batches` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `personnel_id` int(11) NOT NULL,
+  `transaction_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `remarks` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `asset_transactions_batches`
+--
+
+INSERT INTO `asset_transactions_batches` (`id`, `user_id`, `personnel_id`, `transaction_date`, `remarks`) VALUES
+(1, 1, 1, '2026-11-03 13:07:23', 'Sample lending transaction'),
+(2, 6, 3, '2026-11-17 14:30:51', NULL),
+(3, 6, 1, '2026-11-17 15:02:28', 'test issue 2_multiple items');
 
 -- --------------------------------------------------------
 
@@ -179,7 +213,12 @@ CREATE TABLE `departments` (
 --
 
 INSERT INTO `departments` (`id`, `department`) VALUES
-(1, 'IT Department - Sample');
+(5, 'Admin'),
+(6, 'Dcs'),
+(4, 'Finance'),
+(2, 'HR'),
+(1, 'IT Department - Sample'),
+(3, 'Registrar');
 
 -- --------------------------------------------------------
 
@@ -223,7 +262,10 @@ CREATE TABLE `personnels` (
 --
 
 INSERT INTO `personnels` (`id`, `first_name`, `middle_name`, `last_name`, `account_status`, `department`, `employee_no`) VALUES
-(1, 'Juan', NULL, 'Dela Cruz', 1, 1, 'EMP-TEST-001');
+(1, 'Juan', NULL, 'Dela Cruz', 1, 1, 'EMP-TEST-001'),
+(3, 'v', NULL, 'c', 1, 1, '1010'),
+(4, 'm', 'i', 'm', 1, 5, '2010'),
+(5, 'a', NULL, 'e', 1, 2, '1228');
 
 -- --------------------------------------------------------
 
@@ -249,7 +291,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `middle_name`, `last_name`, `username`, `password_hash`, `role`, `account_status`, `created_at`, `updated_at`) VALUES
-(1, 'Test', NULL, 'Administrator', 'test_admin', 'TEST_ONLY_NOT_A_REAL_PASSWORD_HASH', 1, 1, '2026-11-02 15:00:51', '2026-11-02 15:00:51');
+(1, 'Test', NULL, 'Administrator', 'test_admin', 'TEST_ONLY_NOT_A_REAL_PASSWORD_HASH', 1, 1, '2026-11-02 15:00:51', '2026-11-02 15:00:51'),
+(3, 'Ashley Mei', 'Ison', 'Madrid', 'amadrid55', '600000.oliIxV/GuB429KNldO8ygQ==.uyPBS5tFLpQsp/WMtZOrrZRa6iJxHsd4Ee3iMlsUNHY=', 2, 1, '2026-11-13 08:14:32', '2026-11-13 08:14:32'),
+(5, 'Angelica Lourdes', NULL, 'Estanislao', 'aestani76', '600000.swBtEVJ/0ne+0a2pYOK4rA==.LMmUmhpt8L+IMS5E9DFPvIfo4/qrufJ/ttLrDWbBqOE=', 1, 1, '2026-11-13 08:24:55', '2026-11-13 08:24:55'),
+(6, 'Vich Andrei', 'Tekistekis', 'Cortez', 'vcortez70', '600000.C1JLcRxDLfGcP1wgsDhsjw==.ZTY8tW0jQCX9bpOzI5tLqI9loq1/WhmFocJ3MWhcoxA=', 1, 1, '2026-11-15 08:04:02', '2026-11-15 08:04:02'),
+(7, 'Loughshinny', NULL, 'Dublinn', 'ldublin26', '600000.Jm4uVscVjgG4/gVbjxx/RA==.9gVXt/4BMBUcXBgHrHcFxFiwjGeHJ1C4Iyrw0eW0EcA=', 2, 1, '2026-11-15 08:46:48', '2026-11-15 08:46:48');
 
 -- --------------------------------------------------------
 
@@ -286,6 +332,7 @@ ALTER TABLE `account_statuses`
 ALTER TABLE `assets`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `tag` (`tag`),
+  ADD UNIQUE KEY `serial_number` (`serial_number`),
   ADD KEY `condition_id` (`condition_id`),
   ADD KEY `idx_assets_status` (`status_id`),
   ADD KEY `idx_assets_category` (`category_id`),
@@ -320,13 +367,23 @@ ALTER TABLE `asset_transactions`
   ADD KEY `personnel_id` (`personnel_id`),
   ADD KEY `asset_id` (`asset_id`),
   ADD KEY `asset_condition_at_transaction` (`asset_condition_at_transaction`),
-  ADD KEY `asset_condition_at_return` (`asset_condition_at_return`);
+  ADD KEY `asset_condition_at_return` (`asset_condition_at_return`),
+  ADD KEY `asset_transactions_batch_id_IDX` (`batch_id`) USING BTREE;
+
+--
+-- Indexes for table `asset_transactions_batches`
+--
+ALTER TABLE `asset_transactions_batches`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `asset_transactions_batches_users_FK` (`user_id`),
+  ADD KEY `asset_transactions_batches_personnels_FK` (`personnel_id`);
 
 --
 -- Indexes for table `departments`
 --
 ALTER TABLE `departments`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `departments_unique` (`department`);
 
 --
 -- Indexes for table `log_activity`
@@ -375,7 +432,7 @@ ALTER TABLE `account_statuses`
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `asset_categories`
@@ -399,13 +456,19 @@ ALTER TABLE `asset_statuses`
 -- AUTO_INCREMENT for table `asset_transactions`
 --
 ALTER TABLE `asset_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `asset_transactions_batches`
+--
+ALTER TABLE `asset_transactions_batches`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `log_activity`
@@ -417,13 +480,13 @@ ALTER TABLE `log_activity`
 -- AUTO_INCREMENT for table `personnels`
 --
 ALTER TABLE `personnels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
@@ -454,11 +517,19 @@ ALTER TABLE `asset_categories`
 -- Constraints for table `asset_transactions`
 --
 ALTER TABLE `asset_transactions`
+  ADD CONSTRAINT `asset_transactions_asset_transactions_batches_FK` FOREIGN KEY (`batch_id`) REFERENCES `asset_transactions_batches` (`id`),
   ADD CONSTRAINT `asset_transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `asset_transactions_ibfk_2` FOREIGN KEY (`personnel_id`) REFERENCES `personnels` (`id`),
   ADD CONSTRAINT `asset_transactions_ibfk_3` FOREIGN KEY (`asset_id`) REFERENCES `assets` (`id`),
   ADD CONSTRAINT `asset_transactions_ibfk_4` FOREIGN KEY (`asset_condition_at_transaction`) REFERENCES `asset_conditions` (`id`),
   ADD CONSTRAINT `asset_transactions_ibfk_5` FOREIGN KEY (`asset_condition_at_return`) REFERENCES `asset_conditions` (`id`);
+
+--
+-- Constraints for table `asset_transactions_batches`
+--
+ALTER TABLE `asset_transactions_batches`
+  ADD CONSTRAINT `asset_transactions_batches_personnels_FK` FOREIGN KEY (`personnel_id`) REFERENCES `personnels` (`id`),
+  ADD CONSTRAINT `asset_transactions_batches_users_FK` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `log_activity`
