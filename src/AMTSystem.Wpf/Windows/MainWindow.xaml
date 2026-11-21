@@ -99,14 +99,14 @@
                         Tag="AllAssets" />
                     <Button
                         Click="Nav_Click"
-                        Content="Edit Asset Info"
-                        Style="{StaticResource NavButton}"
-                        Tag="EditAsset" />
-                    <Button
-                        Click="Nav_Click"
                         Content="Register"
                         Style="{StaticResource NavButton}"
                         Tag="Register" />
+                    <Button
+                        Click="Nav_Click"
+                        Content="Edit Asset Info"
+                        Style="{StaticResource NavButton}"
+                        Tag="EditAsset" />
                     <Button
                         Click="Nav_Click"
                         Content="Issue"

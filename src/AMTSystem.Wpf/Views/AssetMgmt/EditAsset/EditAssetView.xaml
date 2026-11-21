@@ -13,7 +13,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="2*" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -232,59 +231,6 @@
                 </ScrollViewer>
             </DockPanel>
         </Grid>
-
-        <!--  REVIEW  -->
-        <StackPanel Grid.Row="2" Margin="8,6">
-
-            <Separator Margin="0,0,0,8" />
-
-            <TextBlock
-                Margin="0,0,0,4"
-                FontWeight="SemiBold"
-                Text="Review" />
-
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Editing: " />
-                <TextBlock x:Name="ReviewAssetText" Text="(no asset selected)" />
-            </StackPanel>
-
-            <TextBlock
-                x:Name="ReviewCountText"
-                Margin="0,2,0,0"
-                Text="Fields changed: 0" />
-
-            <DataGrid
-                x:Name="ReviewGrid"
-                MaxHeight="120"
-                Margin="0,6,0,0"
-                AutoGenerateColumns="False"
-                CanUserAddRows="False"
-                CanUserReorderColumns="False"
-                IsReadOnly="True">
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="Auto"
-                        Binding="{Binding Field}"
-                        Header="Field" />
-
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding OldValue}"
-                        Header="Old Value" />
-
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding NewValue}"
-                        Header="New Value" />
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <TextBlock Margin="0,6,0,2" Text="Remarks" />
-
-            <TextBox x:Name="RemarksBox" />
-
-        </StackPanel>
 
         <!--  ACTION BUTTONS  -->
         <DockPanel
