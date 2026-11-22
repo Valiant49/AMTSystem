@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using AMTSystem.Core;
 using AMTSystem.Core.Models;
 using AMTSystem.Wpf.Views.AssetMgmt;
+//using AMTSystem.Wpf.Views.AssetMgmt.EditAssetView;
 using AMTSystem.Wpf.Views.PersonnelMgmt;
 using AMTSystem.Wpf.Views.PersonnelMgmt.Departments;
 using AMTSystem.Wpf.Views.UserMgmt;
@@ -46,6 +47,10 @@ public partial class MainWindow : Window
             case "AllAssets":
                 ContentArea.Content = new AllAssetsView();
                 setHeaderText("All Assets");
+                break;
+            case "EditAsset":
+                ContentArea.Content = new EditAssetView();
+                setHeaderText("Edit Asset");
                 break;
             case "Register":
                 RegisterView form = new RegisterView(new AssetDraft());
