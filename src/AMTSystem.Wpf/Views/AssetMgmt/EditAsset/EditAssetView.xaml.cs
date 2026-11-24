@@ -145,8 +145,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
 
             EditForm.IsEnabled = true;
 
-            ReviewAssetText.Text =
-                $"{asset.Tag} - {asset.Name}";
+            
 
             RefreshReview();
         }
@@ -204,10 +203,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             // Their ComboBox values need to be connected
             // to the actual Asset model first.
 
-            ReviewGrid.ItemsSource = changes;
-
-            ReviewCountText.Text =
-                $"Fields changed: {changes.Count}";
+            
 
             SaveButton.IsEnabled = changes.Count > 0;
         }
@@ -232,10 +228,10 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             }
         }
 
-        // ==========================================
+        
         // SAVE CHANGES
-        // ==========================================
-
+       
+        
         private void SaveButton_Click(
             object sender,
             RoutedEventArgs e)
@@ -285,9 +281,9 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
                 MessageBoxImage.Information);
         }
 
-        // ==========================================
+        
         // CANCEL CHANGES
-        // ==========================================
+        
 
         private void CancelButton_Click(
             object sender,
@@ -298,6 +294,10 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
 
             // Restore the original saved values.
             LoadFormFromAsset(_selectedAsset);
+        }
+
+        private class ReviewAssetText
+        {
         }
     }
 }
