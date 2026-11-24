@@ -42,7 +42,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         // ==========================================
         private void EditAssetView_Loaded(object sender, RoutedEventArgs e)
         {
-            DateModifiedPicker.SelectedDate = DateTime.Today;
+           
 
             LoadAssets();
 

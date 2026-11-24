@@ -109,5 +109,24 @@ public class PersonnelRepository
         return cmd.LastInsertedId;
     }
 
+    public static void UpdateDepartment(int id, string department)
+    {
+        using var conn = new MySqlConnection(ConnectionString);
+        conn.Open();
+
+        using var cmd = conn.CreateCommand();
+
+        cmd.CommandText = """
+        UPDATE departments
+        SET department = @department
+        WHERE id = @id
+        """;
+
+        cmd.Parameters.AddWithValue("@department", department);
+        cmd.Parameters.AddWithValue("@id", id);
+
+        cmd.ExecuteNonQuery();
+    }
+
 
 }

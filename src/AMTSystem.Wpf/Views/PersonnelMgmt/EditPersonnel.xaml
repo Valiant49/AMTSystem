@@ -23,16 +23,6 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" Text="Editing Officer: " />
-                <TextBlock x:Name="EditingOfficerText" VerticalAlignment="Center" />
-            </StackPanel>
-
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" Text="Date Modified: " />
-                <DatePicker x:Name="DateModifiedPicker" Width="200" />
-            </StackPanel>
         </Grid>
 
         <!--  PERSONNEL SELECTION AND EDITING  -->
