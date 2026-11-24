@@ -5,17 +5,18 @@ using AMTSystem.Core.Requests;
 
 namespace AMTSystem.Core.Services;
 
-public class AssetIssuanceService
+public class AssetTransactionService
+//public class AssetIssuanceService
 {
     private readonly IAssetTransactionRepository _txRepo;
     //private readonly AssetIssuanceService _service;
 
-    public AssetIssuanceService(IAssetTransactionRepository txRepo)
+    public AssetTransactionService(IAssetTransactionRepository txRepo)
     {
         _txRepo = txRepo;
     }
 
-    public async Task<OperationResult> IssueAsync(IssueAssetsRequest request)
+    public async Task<OperationResult> IssueAsync(AssetTransactionRequest request)
     {
 
         var errors = request.Validate();
@@ -30,14 +31,37 @@ public class AssetIssuanceService
         {
             int batchId = await _txRepo.CreateBatchAsync(request);
             return OperationResult.Ok(batchId);
-        } catch (AssetAlreadyIssuedException)
+        } 
+        catch (AssetAlreadyIssuedException)
         {
             return OperationResult.Fail(
                 "An asset was just issued by someone else. Refresh and try again.");
         }
     }
 
-    private async Task<List<string>> ValidateAgainstDbAsync(IssueAssetsRequest request)
+    public async Task<OperationResult> LendAsync(AssetTransactionRequest request)
+    {
+        var errors = request.Validate();
+        if (errors.Count > 0)
+            return OperationResult.Fail(errors);
+
+        errors = await ValidateAgainstDbAsync(request);
+        if (errors.Count > 0)
+            return OperationResult.Fail(errors);
+
+        try
+        {
+            int batchId = await _txRepo.CreateBatchAsync(request);
+            return OperationResult.Ok(batchId);
+        } 
+        catch (AssetAlreadyIssuedException)
+        {
+            return OperationResult.Fail(
+                "As asset was just lent by someone else. Refresh and try again.");
+        }
+    }
+
+    private async Task<List<string>> ValidateAgainstDbAsync(AssetTransactionRequest request)
     {
         var errors = new List<string>();
 

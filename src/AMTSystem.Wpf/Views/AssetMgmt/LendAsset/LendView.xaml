@@ -25,13 +25,13 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <TextBlock Text="Issuing Officer: " />
-                <TextBlock x:Name="IssuingOfficerText" />
+                <TextBlock Text="Lending Officer: " />
+                <TextBlock x:Name="LendingOfficerText" />
             </StackPanel>
 
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" Text="Date Issued: " />
-                <DatePicker x:Name="DateIssuedPicker" Width="200" />
+                <TextBlock VerticalAlignment="Center" Text="Date Lent: " />
+                <DatePicker x:Name="DateLentPicker" Width="200" />
             </StackPanel>
         </Grid>
 
@@ -130,6 +130,10 @@
                             Width="Auto"
                             Binding="{Binding Condition_String}"
                             Header="Condition" />
+                        <!--<DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Status_String}"
+                            Header="Status" />-->
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding Manufacturer}"
@@ -149,11 +153,11 @@
             <TextBlock Text="Review" />
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Issue to: " />
+                <TextBlock Text="Lend to: " />
                 <TextBlock x:Name="ReviewPersonnelText" Text="(no personnel selected)" />
             </StackPanel>
 
-            <TextBlock x:Name="ReviewCountText" Text="Assets to issue: 0" />
+            <TextBlock x:Name="ReviewCountText" Text="Assets to lend: 0" />
 
             <DataGrid
                 x:Name="ReviewGrid"
@@ -198,10 +202,10 @@
             VerticalAlignment="Bottom"
             LastChildFill="False">
             <Button
-                x:Name="IssueButton"
+                x:Name="LendButton"
                 Padding="64,16"
-                Click="IssueButton_Click"
-                Content="Issue Assets"
+                Click="LendButton_Click"
+                Content="Lend Assets"
                 DockPanel.Dock="Right" />
             <Button
                 Margin="0,0,8,0"

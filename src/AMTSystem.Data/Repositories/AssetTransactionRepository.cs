@@ -23,21 +23,6 @@ public class AssetTransactionRepository : IAssetTransactionRepository
 {
     private const string ConnectionString = "Server=localhost;Port=3306;Database=amtsystem;User ID=root;Password=";
 
-    // transactions
-    //public static long IssueAssets()
-    //{
-    //    using var conn = new MySqlConnection(ConnectionString);
-    //    conn.Open();
-
-    //    using var cmd = conn.CreateCommand();
-    //    cmd.CommandText =
-    //        """
-
-    //        """;
-
-    //    return cmd.LastInsertedId;
-    //}
-
     public async Task<List<OpenAssetInfo>> GetOpenAssetIdsAsync(IEnumerable<int> assetIds)
     {
         var ids = assetIds.ToList();
@@ -79,8 +64,11 @@ public class AssetTransactionRepository : IAssetTransactionRepository
         return result;
     }
 
-    public async Task<int> CreateBatchAsync(IssueAssetsRequest request)
+    public async Task<int> CreateBatchAsync(AssetTransactionRequest request)
     {
+        int newStatus = request.Type == TransactionType.Lent ?
+            AssetStatusIds.Lent : AssetStatusIds.Issued;
+
         await using var conn = new MySqlConnection(ConnectionString);
         await conn.OpenAsync();
         await using var tx = await conn.BeginTransactionAsync();
@@ -152,4 +140,6 @@ public class AssetTransactionRepository : IAssetTransactionRepository
             throw;
         }
     }
+
+    //create lend 
 }

@@ -17,5 +17,5 @@ public interface IAssetTransactionRepository
 {
     Task<List<OpenAssetInfo>> GetOpenAssetIdsAsync(IEnumerable<int> assetIds);
 
-    Task<int> CreateBatchAsync(IssueAssetsRequest request);
+    Task<int> CreateBatchAsync(AssetTransactionRequest request);
 }

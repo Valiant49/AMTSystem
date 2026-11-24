@@ -10,7 +10,7 @@ public enum TransactionType
     Issued
 }
 
-public class IssueItem
+public class TransactionItem
 {
     public int AssetId { get; set; }
     public int ConditionId {  get; set; }
@@ -18,13 +18,13 @@ public class IssueItem
 
 }
 
-public class IssueAssetsRequest
+public class AssetTransactionRequest
 {
     public int UserId { get; set; }
     public int PersonnelId { get; set; }
     public TransactionType Type { get; set; }
     public string? Remarks { get; set; }
-    public List<IssueItem> Items { get; set; } = new();
+    public List<TransactionItem> Items { get; set; } = new();
 
     public List<string> Validate()
     {
