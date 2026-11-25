@@ -56,6 +56,44 @@ public partial class ManageDepartments : UserControl
         }
     }
 
+    private void ArchiveButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (selectedDepartment == null)
+        {
+            MessageBox.Show("Please select a department to archive.");
+            return;
+        }
+
+        MessageBoxResult result = MessageBox.Show(
+            $"Are you sure you want to archive {selectedDepartment.DepartmentName}?",
+            "Confirm Archive",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question
+        );
+
+        if (result == MessageBoxResult.Yes)
+        {
+            try
+            {
+                PersonnelRepository.ArchiveDepartment(selectedDepartment.Id);
+
+                MessageBox.Show("Department archived successfully.");
+
+                DepartmentGrid.SelectedItem = null;
+                selectedDepartment = null;
+                DeptInput.Clear();
+                DeptSubmitButton.Content = "Add";
+                CancelButton.Visibility = Visibility.Collapsed;
+
+                LoadDepartments();
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Database error: " + ex.Message);
+            }
+        }
+    }
+
     private void Dept_Submit_Clicked(object sender, RoutedEventArgs e)
     {
         string department_input = DeptInput.Text.Trim();

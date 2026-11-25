@@ -56,8 +56,10 @@
                         Visibility="Collapsed" />
 
                     <Button
+                        x:Name="ArchiveButton"
                         Width="75"
                         Margin="0,0,8,0"
+                        Click="ArchiveButton_Click"
                         Content="Archive" />
 
                     <Button
