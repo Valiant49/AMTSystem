@@ -132,7 +132,7 @@
                                                                 <CheckBox
                                                                     Margin="0,0,8,0"
                                                                     VerticalAlignment="Center"
-                                                                    Click="CheckBox_Click"
+                                                                    Click="BatchCheckBox_Click"
                                                                     Tag="{Binding Name}" />
                                                                 <TextBlock FontWeight="SemiBold" Text="{Binding Name, StringFormat=Batch #{0}}" />
                                                                 <TextBlock Margin="8,0,0,0" Text="{Binding ItemCount, StringFormat=({0} items)}" />

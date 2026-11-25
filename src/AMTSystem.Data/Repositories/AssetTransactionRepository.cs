@@ -18,6 +18,26 @@ public static class AssetStatusIds
     public const int Available = 1;
     public const int Issued = 2;
     public const int Lent = 3;
+    public const int Maintenance = 4;
+    public const int Disposed = 5;
+}
+
+public static class AssetConditionIds
+{
+    public const int New = 1;
+    public const int Good = 2;
+    public const int Fair = 3;
+    public const int Poor = 4;
+    public const int Damaged = 5;
+}
+
+public static class ReturnRules
+{
+    // The one place that decides an asset's status after a return
+    public static int StatusAfterReturn(int conditionAtReturnId) =>
+        conditionAtReturnId == AssetConditionIds.Damaged
+            ? AssetStatusIds.Maintenance
+            : AssetStatusIds.Available;
 }
 
 public class AssetTransactionRepository : IAssetTransactionRepository
@@ -200,5 +220,72 @@ public class AssetTransactionRepository : IAssetTransactionRepository
         }
 
         return items;
+    }
+
+    public async Task ReturnAsync(ReturnAssetsRequest request)
+    {
+        await using var conn = new MySqlConnection(ConnectionString);
+        await conn.OpenAsync();
+        await using var tx = await conn.BeginTransactionAsync();
+
+        try
+        {
+            foreach (var item in request.Items)
+            {
+                // 1. find the asset for this OPEN transaction (and lock the row)
+                int assetId;
+                await using (var findCmd = new MySqlCommand(@"
+                SELECT asset_id
+                FROM asset_transactions
+                WHERE id = @id AND returned_at IS NULL
+                FOR UPDATE;", conn, tx))
+                {
+                    findCmd.Parameters.AddWithValue("@id", item.TransactionId);
+                    var o = await findCmd.ExecuteScalarAsync();
+                    if (o == null)
+                        throw new TransactionAlreadyReturnedException();
+                    assetId = Convert.ToInt32(o);
+                }
+
+                // 2. close the transaction row
+                await using (var closeCmd = new MySqlCommand(@"
+                UPDATE asset_transactions
+                SET returned_at = NOW(),
+                    asset_condition_at_return = @cond,
+                    remarks = CASE WHEN @rem IS NULL THEN remarks
+                                   ELSE CONCAT_WS(' | ', remarks, @rem) END
+                WHERE id = @id AND returned_at IS NULL;", conn, tx))
+                {
+                    closeCmd.Parameters.AddWithValue("@cond", item.ConditionAtReturnId);
+                    closeCmd.Parameters.AddWithValue("@rem",
+                        string.IsNullOrWhiteSpace(item.Remarks) ? DBNull.Value : item.Remarks);
+                    closeCmd.Parameters.AddWithValue("@id", item.TransactionId);
+
+                    if (await closeCmd.ExecuteNonQueryAsync() == 0)
+                        throw new TransactionAlreadyReturnedException();
+                }
+
+                // 3. update the asset's status (and its current condition)
+                await using (var statusCmd = new MySqlCommand(@"
+                UPDATE assets
+                SET status_id = @status,
+                    condition_id = @cond
+                WHERE id = @asset;", conn, tx))
+                {
+                    statusCmd.Parameters.AddWithValue("@status",
+                        ReturnRules.StatusAfterReturn(item.ConditionAtReturnId));
+                    statusCmd.Parameters.AddWithValue("@cond", item.ConditionAtReturnId);
+                    statusCmd.Parameters.AddWithValue("@asset", assetId);
+                    await statusCmd.ExecuteNonQueryAsync();
+                }
+            }
+
+            await tx.CommitAsync();
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
     }
 }

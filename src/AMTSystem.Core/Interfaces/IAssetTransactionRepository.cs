@@ -21,4 +21,6 @@ public interface IAssetTransactionRepository
     Task<int> CreateBatchAsync(AssetTransactionRequest request);
 
     Task<List<HeldItem>> GetOpenItemsByPersonnelAsync(int personnelId);
+
+    Task ReturnAsync(ReturnAssetsRequest request);
 }

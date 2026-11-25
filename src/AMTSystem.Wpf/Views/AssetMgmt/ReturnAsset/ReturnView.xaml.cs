@@ -6,7 +6,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
+using AMTSystem.Core;
 using AMTSystem.Core.Models;
+using AMTSystem.Core.Requests;
+using AMTSystem.Core.Services;
 using AMTSystem.Data.Repositories;
 
 using MySqlConnector;
@@ -24,15 +27,19 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         private ObservableCollection<HeldItem> _heldItems = new();
         private Personnel? _selectedPersonnel;
 
-        public List<AssetCondition> Conditions { get; private set; } = new();
+        public List<LookupItem> Conditions { get; private set; } = new();
+
+        private readonly AssetTransactionService _service;
 
         public ReturnView()
         {
             InitializeComponent();
-            Loaded += ReturnView_Loaded;
+            Loaded += ReturnView_PersonnelLoaded;
+            Conditions = AssetRepository.GetAssetConditions();
+            _service = new AssetTransactionService(new AssetTransactionRepository());
         }
 
-        private void ReturnView_Loaded(object sender, RoutedEventArgs e)
+        private void ReturnView_PersonnelLoaded(object sender, RoutedEventArgs e)
         {
             LoadPersonnel();
 
@@ -55,7 +62,23 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         {
             string searchText = PersonnelSearchBox.Text.Trim();
 
-            var filteredPersonnel = string.IsNullOrWhiteSpace(searchText);
+            var filteredPersonnel = string.IsNullOrWhiteSpace(searchText)
+                ? _allPersonnel
+                : _allPersonnel.Where(a =>
+                    Contains(a.FirstName, searchText) ||
+                    Contains(a.LastName, searchText) ||
+                    Contains(a.EmployeeNo, searchText) ||
+                    Contains(a.Department, searchText))
+                .ToList();
+
+            PersonnelGrid.ItemsSource = filteredPersonnel;
+        }
+
+        private static bool Contains(string? source, string searchText)
+        {
+            return source?.Contains(
+                searchText,
+                StringComparison.OrdinalIgnoreCase) ?? false;
         }
 
         private void TagSearchBox_KeyDown(object sender, KeyEventArgs e)
@@ -121,9 +144,12 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             foreach (var item in _heldItems) item.IsSelected = check;
         }
 
-        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        private void BatchCheckBox_Click(object sender, RoutedEventArgs e)
         {
+            if (sender is not CheckBox cb || cb.Tag is not int batchId) return;
 
+            foreach (var item in _heldItems.Where(i => i.BatchId == batchId))
+                item.IsSelected = cb.IsChecked == true;
         }
 
         private void ConditionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -131,14 +157,70 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
 
         }
         
-        private void ReturnButton_Click(object sender, RoutedEventArgs e)
+        private async void ReturnButton_Click(object sender, RoutedEventArgs e)
         {
+            HeldItemsGrid.CommitEdit(DataGridEditingUnit.Row, true);
+            var selected = _heldItems.Where(i => i.IsSelected).ToList();
+            if (selected.Count == 0)
+            {
+                MessageBox.Show("Tick at least one item to return.");
+                return;
+            }
 
+            var request = new ReturnAssetsRequest
+            {
+                UserId = Session.CurrentUser!.Id,
+                Items = selected.Select(i => new ReturnItem
+                {
+                    TransactionId = i.TransactionId,
+                    ConditionAtReturnId = i.ConditionAtReturnId,
+                    Remarks = i.ReturnRemarks
+                }).ToList()
+            };
+
+            ReturnButton.IsEnabled = false;
+            try
+            {
+                var result = await _service.ReturnAsync(request);
+
+                if (result.Success)
+                {
+                    MessageBox.Show("Items returned.");
+                    await LoadHeldItemsAsync();   // returned rows disappear; person stays selected
+                }
+                else
+                {
+                    MessageBox.Show(string.Join("\n", result.Errors));
+                    // re-enable via UpdateReview() in finally
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unexpected error: " + ex.Message);
+            }
+            finally
+            {
+                UpdateReview();   // sets ReturnButton.IsEnabled from the current ticks
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            foreach (var i in _heldItems) i.PropertyChanged -= HeldItem_PropertyChanged;
+            _heldItems = new ObservableCollection<HeldItem>();
+            ((CollectionViewSource)Resources["HeldItemsView"]).Source = _heldItems;
 
+            _selectedPersonnel = null;
+            PersonnelGrid.SelectedItem = null;
+            PersonnelSearchBox.Clear();
+            TagSearchBox.Clear();
+            SelectAllCheckBox.IsChecked = false;
+
+            ReviewPersonnelText.Text = "(no personnel selected)";
+            EmptyStateText.Text = "Select a personnel to see their items.";
+            EmptyStateText.Visibility = Visibility.Visible;
+
+            UpdateReview();
         }
     }
 }

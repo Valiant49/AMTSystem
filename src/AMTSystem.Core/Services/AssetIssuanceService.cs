@@ -73,4 +73,22 @@ public class AssetTransactionService
 
         return errors;
     }
+
+    public async Task<OperationResult> ReturnAsync(ReturnAssetsRequest request)
+    {
+        var errors = request.Validate();
+        if (errors.Count > 0)
+            return OperationResult.Fail(errors);
+
+        try
+        {
+            await _txRepo.ReturnAsync(request);
+            return OperationResult.Ok();
+        }
+        catch (TransactionAlreadyReturnedException)
+        {
+            return OperationResult.Fail(
+                "An item was already returned by someone else. Reload and try again.");
+        }
+    }
 }
