@@ -6,6 +6,7 @@ using AMTSystem.Core;
 
 using AMTSystem.Core.Exceptions;
 using AMTSystem.Core.Interfaces;
+using AMTSystem.Core.Models;
 using AMTSystem.Core.Requests;
 
 using MySqlConnector;
@@ -141,5 +142,63 @@ public class AssetTransactionRepository : IAssetTransactionRepository
         }
     }
 
-    //create lend 
+    //create return
+    public async Task<List<HeldItem>> GetOpenItemsByPersonnelAsync(int personnelId)
+    {
+        var items = new List<HeldItem>();
+
+        const string sql = @"
+        WITH RECURSIVE cat_path AS (
+            SELECT id, category AS full_path
+            FROM asset_categories
+            WHERE parent_category_id IS NULL
+            UNION ALL
+            SELECT c.id, CONCAT(cp.full_path, ' > ', c.category)
+            FROM asset_categories c
+            JOIN cat_path cp ON c.parent_category_id = cp.id
+        )
+        SELECT t.id AS transaction_id,
+               t.batch_id,
+               t.asset_id,
+               t.transaction_type,
+               t.transaction_date,
+               t.asset_condition_at_transaction AS condition_id,
+               a.tag,
+               a.model,
+               cp.full_path AS category_name
+        FROM asset_transactions t
+        JOIN assets a ON a.id = t.asset_id
+        LEFT JOIN cat_path cp ON cp.id = a.category_id
+        WHERE t.personnel_id = @person
+          AND t.returned_at IS NULL
+        ORDER BY t.batch_id, a.tag;";
+
+        await using var conn = new MySqlConnection(ConnectionString);
+        await conn.OpenAsync();
+
+        await using var cmd = new MySqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("@person", personnelId);
+
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            int condId = reader.GetInt32("condition_id");
+
+            items.Add(new HeldItem
+            {
+                TransactionId = reader.GetInt32("transaction_id"),
+                BatchId = reader.GetInt32("batch_id"),
+                AssetId = reader.GetInt32("asset_id"),
+                Tag = reader.GetString("tag"),
+                Model = reader.IsDBNull(reader.GetOrdinal("model")) ? "" : reader.GetString("model"),
+                Category_String = reader.IsDBNull(reader.GetOrdinal("category_name")) ? "" : reader.GetString("category_name"),
+                TransactionType = reader.GetString("transaction_type"),
+                TransactionDate = reader.GetDateTime("transaction_date"),
+                ConditionAtIssueId = condId,
+                ConditionAtReturnId = condId      // default: same as at issue
+            });
+        }
+
+        return items;
+    }
 }
