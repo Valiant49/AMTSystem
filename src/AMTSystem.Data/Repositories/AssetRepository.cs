@@ -99,25 +99,27 @@ public static class AssetRepository
         using var cmd = conn.CreateCommand();
 
         cmd.CommandText =
-            "WITH RECURSIVE cat_path AS (" +
-                "SELECT id, category AS full_path " +
-                "FROM asset_categories " +
-                "WHERE parent_category_id IS NULL " +
+            """
+            WITH RECURSIVE cat_path AS (
+                SELECT id, category AS full_path 
+                FROM asset_categories 
+                WHERE parent_category_id IS NULL 
 
-                "UNION ALL " +
+                UNION ALL
 
-                "SELECT c.id, CONCAT(cp.full_path, ' > ', c.category) " +
-                "FROM asset_categories c " +
-                "JOIN cat_path cp ON c.parent_category_id = cp.id " +
-            ") " +
+                SELECT c.id, CONCAT(cp.full_path, ' > ', c.category) 
+                FROM asset_categories c 
+                JOIN cat_path cp ON c.parent_category_id = cp.id 
+            )  
 
-            "SELECT a.id, a.name, a.tag, a.serial_number, stat.status, a.category_id, " +
-            "   cp.full_path AS category_name, a.components, a.condition_id, ac.condition, a.manufacturer, a.model " +
-            "FROM assets a " +
-            "LEFT JOIN cat_path cp ON cp.id = a.category_id " +
-            "LEFT JOIN asset_statuses stat ON stat.id = a.status_id " +
-            "LEFT JOIN asset_conditions ac ON ac.id = a.condition_id " +
-            "WHERE a.status_id = 1;";
+            SELECT a.id, a.name, a.tag, a.serial_number, stat.status, a.category_id, 
+               cp.full_path AS category_name, a.components, a.condition_id, ac.condition, a.manufacturer, a.model
+            FROM assets a 
+            LEFT JOIN cat_path cp ON cp.id = a.category_id 
+            LEFT JOIN asset_statuses stat ON stat.id = a.status_id 
+            LEFT JOIN asset_conditions ac ON ac.id = a.condition_id 
+            WHERE a.status_id = 1;
+            """;
 
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
@@ -163,7 +165,7 @@ public static class AssetRepository
 
     public static List<LookupItem> GetAssetConditions()
     {
-        return GetLookup("SELECT ac.id, ac.condition AS name FROM asset_conditions ac ORDER BY ac.condition");
+        return GetLookup("SELECT ac.id, ac.condition AS name FROM asset_conditions ac ORDER BY ac.id");
     }
 
     public static List<string> GetAssetManufacturers()

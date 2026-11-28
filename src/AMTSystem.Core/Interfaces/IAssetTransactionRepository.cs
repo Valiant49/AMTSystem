@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
+using AMTSystem.Core.Models;
 using AMTSystem.Core.Requests;
 
 namespace AMTSystem.Core.Interfaces;
@@ -17,5 +18,9 @@ public interface IAssetTransactionRepository
 {
     Task<List<OpenAssetInfo>> GetOpenAssetIdsAsync(IEnumerable<int> assetIds);
 
-    Task<int> CreateBatchAsync(IssueAssetsRequest request);
+    Task<int> CreateBatchAsync(AssetTransactionRequest request);
+
+    Task<List<HeldItem>> GetOpenItemsByPersonnelAsync(int personnelId);
+
+    Task ReturnAsync(ReturnAssetsRequest request);
 }

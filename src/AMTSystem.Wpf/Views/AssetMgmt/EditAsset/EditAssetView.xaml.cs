@@ -8,7 +8,7 @@ using AMTSystem.Data.Repositories;
 using MySqlConnector;
 
 using AMTSystem.Core.Models;
-
+ 
 namespace AMTSystem.Wpf.Views.AssetMgmt
 {
     public partial class EditAssetView : UserControl
@@ -40,7 +40,6 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         // ==========================================
         // PAGE LOADING
         // ==========================================
-
         private void EditAssetView_Loaded(object sender, RoutedEventArgs e)
         {
             DateModifiedPicker.SelectedDate = DateTime.Today;
@@ -75,9 +74,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         // ASSET SEARCH
         // ==========================================
 
-        private void AssetSearchBox_TextChanged(
-    object sender,
-    TextChangedEventArgs e)
+        private void AssetSearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchText = AssetSearchBox.Text.Trim();
 
@@ -103,10 +100,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         // ==========================================
         // SELECT ASSET
         // ==========================================
-
-        private void SelectAssetButton_Click(
-            object sender,
-            RoutedEventArgs e)
+        private void SelectAssetButton_Click(object sender, RoutedEventArgs e)
         {
             if (AssetGrid.SelectedItem is not Asset asset)
             {
@@ -127,7 +121,6 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         // ==========================================
         // LOAD ASSET DETAILS INTO FORM
         // ==========================================
-
         private void LoadFormFromAsset(Asset asset)
         {
             _isLoading = true;
@@ -145,8 +138,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
 
             EditForm.IsEnabled = true;
 
-            ReviewAssetText.Text =
-                $"{asset.Tag} - {asset.Name}";
+
 
             RefreshReview();
         }
@@ -155,16 +147,12 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         // LIVE REVIEW
         // ==========================================
 
-        private void FormTextChanged(
-            object sender,
-            TextChangedEventArgs e)
+        private void FormTextChanged(object sender, TextChangedEventArgs e)
         {
             RefreshReview();
         }
 
-        private void FormSelectionChanged(
-            object sender,
-            SelectionChangedEventArgs e)
+        private void FormSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RefreshReview();
         }
@@ -204,19 +192,12 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             // Their ComboBox values need to be connected
             // to the actual Asset model first.
 
-            ReviewGrid.ItemsSource = changes;
 
-            ReviewCountText.Text =
-                $"Fields changed: {changes.Count}";
 
             SaveButton.IsEnabled = changes.Count > 0;
         }
 
-        private static void Compare(
-            List<FieldChange> changes,
-            string field,
-            string? oldValue,
-            string? newValue)
+        private static void Compare(List<FieldChange> changes, string field, string? oldValue, string? newValue)
         {
             oldValue ??= "";
             newValue = (newValue ?? "").Trim();
@@ -232,13 +213,9 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             }
         }
 
-        // ==========================================
-        // SAVE CHANGES
-        // ==========================================
 
-        private void SaveButton_Click(
-            object sender,
-            RoutedEventArgs e)
+        // SAVE CHANGES
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedAsset == null)
                 return;
@@ -259,14 +236,11 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             // Apply the edited values to the selected asset.
             _selectedAsset.Name = NameBox.Text.Trim();
 
-            _selectedAsset.SerialNumber =
-                SerialNumberBox.Text.Trim();
+            _selectedAsset.SerialNumber = SerialNumberBox.Text.Trim();
 
-            _selectedAsset.Manufacturer =
-                ManufacturerBox.Text.Trim();
+            _selectedAsset.Manufacturer = ManufacturerBox.Text.Trim();
 
-            _selectedAsset.Model =
-                ModelBox.Text.Trim();
+            _selectedAsset.Model = ModelBox.Text.Trim();
 
             // TODO: Save the updated asset to the database.
             // Example:
@@ -285,13 +259,9 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
                 MessageBoxImage.Information);
         }
 
-        // ==========================================
-        // CANCEL CHANGES
-        // ==========================================
 
-        private void CancelButton_Click(
-            object sender,
-            RoutedEventArgs e)
+        // CANCEL CHANGES
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedAsset == null)
                 return;
@@ -299,6 +269,10 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             // Restore the original saved values.
             LoadFormFromAsset(_selectedAsset);
         }
+
+        private class ReviewAssetText
+        {
+
+        }
     }
 }
- 

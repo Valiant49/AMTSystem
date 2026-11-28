@@ -20,8 +20,13 @@ public class PersonnelRepository
         using var conn = new MySqlConnection(ConnectionString);
         conn.Open();
 
-        using var cmd = conn.CreateCommand();
-        cmd.CommandText = "SELECT id, department FROM departments ORDER BY department";
+        using var cmd = conn.CreateCommand();       
+        cmd.CommandText = """
+        SELECT id, department, status
+        FROM departments
+        WHERE status = 'Active'
+        ORDER BY department
+        """;
 
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
@@ -29,9 +34,28 @@ public class PersonnelRepository
             Department d = new Department();
             d.Id = reader.GetInt32("id");
             d.DepartmentName = reader.GetString("department");
+            d.Status = reader.GetString("status");
             list.Add(d);
         }
         return list;
+    }
+
+    public static void ArchiveDepartment(int id)
+    {
+        using var conn = new MySqlConnection(ConnectionString);
+        conn.Open();
+
+        using var cmd = conn.CreateCommand();
+
+        cmd.CommandText = """
+        UPDATE departments
+        SET status = 'Archived'
+        WHERE id = @id
+        """;
+
+        cmd.Parameters.AddWithValue("@id", id);
+
+        cmd.ExecuteNonQuery();
     }
 
     public static List<Personnel> GetPersonnels()
@@ -107,6 +131,25 @@ public class PersonnelRepository
 
         cmd.ExecuteNonQuery();
         return cmd.LastInsertedId;
+    }
+
+    public static void UpdateDepartment(int id, string department)
+    {
+        using var conn = new MySqlConnection(ConnectionString);
+        conn.Open();
+
+        using var cmd = conn.CreateCommand();
+
+        cmd.CommandText = """
+        UPDATE departments
+        SET department = @department
+        WHERE id = @id
+        """;
+
+        cmd.Parameters.AddWithValue("@department", department);
+        cmd.Parameters.AddWithValue("@id", id);
+
+        cmd.ExecuteNonQuery();
     }
 
 

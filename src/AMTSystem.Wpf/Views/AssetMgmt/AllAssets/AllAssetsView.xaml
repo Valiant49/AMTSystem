@@ -18,35 +18,35 @@
             IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding Name}"
                     Header="Name" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding Tag}"
                     Header="Tag" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding SerialNumber}"
                     Header="Serial No." />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding Status_String}"
                     Header="Status" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding Category_String}"
                     Header="Category" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding Condition_String}"
                     Header="Condition" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding Manufacturer}"
                     Header="Manufacturer" />
                 <DataGridTextColumn
-                    Width="*"
+                    Width="Auto"
                     Binding="{Binding Model}"
                     Header="Model" />
                 <DataGridTextColumn
