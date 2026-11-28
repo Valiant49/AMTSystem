@@ -23,7 +23,7 @@ public partial class MainWindow : Window
 
         if (!Session.IsAdmin)
         {
-            AddDepartment.Visibility = Visibility.Collapsed;
+            ManageDepartments.Visibility = Visibility.Collapsed;
         }
 
     }
@@ -86,11 +86,11 @@ public partial class MainWindow : Window
                 ContentArea.Content = new EditPersonnel();
                 setHeaderText("Edit Personnel Information");
                 break;
-            case "AddDepartment":
-                AddDepartment dept_form = new AddDepartment();
+            case "ManageDepartments":
+                ManageDepartments dept_form = new ManageDepartments();
                 dept_form.DeptSubmit_Clicked += Dept_Submit;
                 ContentArea.Content = dept_form;
-                setHeaderText("Add Department Record");
+                setHeaderText("Manage Departments Record");
                 break;
             // System Users
             case "SystemUsers":
@@ -106,6 +106,13 @@ public partial class MainWindow : Window
                 ContentArea.Content = add_user;
                 setHeaderText("Add System User");
                 break;
+            case "ManageUsers":
+                ManageUsers manage_users = new ManageUsers();
+                //line for some event handler thing
+                ContentArea.Content = manage_users;
+                setHeaderText("Manage Users");
+                break;
+           
         }
     }
 
@@ -122,14 +129,20 @@ public partial class MainWindow : Window
 
     private void Dept_Submit(object? sender, EventArgs e)
     {
-        ContentArea.Content = new AddDepartment();
-        setHeaderText("Add Department Record");
+        ContentArea.Content = new ManageDepartments();
+        setHeaderText("Manage Departments Record");
     }
 
     private void Personnel_Submit(object? sender, EventArgs e)
     {
         ContentArea.Content = new AddPersonnel();
         setHeaderText("Add Personnel Record");
+    }
+
+    private void Manage_Submit(object? sender, EventArgs e)
+    {
+        ContentArea.Content = new ManageUsers();
+        setHeaderText("Manage Users");
     }
 
     private void User_Submit(object? sender, EventArgs e)

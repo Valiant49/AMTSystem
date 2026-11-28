@@ -154,11 +154,11 @@
                         Style="{StaticResource NavButton}"
                         Tag="EditPersonnel" />
                     <Button
-                        x:Name="AddDepartment"
+                        x:Name="ManageDepartments"
                         Click="Nav_Click"
-                        Content="Add Department"
+                        Content="Manage Departments"
                         Style="{StaticResource NavButton}"
-                        Tag="AddDepartment" />
+                        Tag="ManageDepartments" />
 
                     <!--  User Management  -->
                     <TextBlock Style="{StaticResource NavHeader}" Text="USER MANAGEMENT" />
@@ -172,6 +172,11 @@
                         Content="Add System Users"
                         Style="{StaticResource NavButton}"
                         Tag="AddUsers" />
+                    <Button
+                        Click="Nav_Click"
+                        Content="Manage Users"
+                        Style="{StaticResource NavButton}"
+                        Tag="ManageUsers" />
                     <Button
                         Click="Nav_Click"
                         Content="Roles and Permissions"

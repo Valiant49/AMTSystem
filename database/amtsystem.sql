@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 18, 2026 at 07:45 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Nov 27, 2026 at 07:04 AM
+-- Server version: 10.11.16-MariaDB
+-- PHP Version: 8.3.36
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -205,20 +205,22 @@ INSERT INTO `asset_transactions_batches` (`id`, `user_id`, `personnel_id`, `tran
 
 CREATE TABLE `departments` (
   `id` int(11) NOT NULL,
-  `department` varchar(100) NOT NULL
+  `department` varchar(100) NOT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'Active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `departments`
 --
 
-INSERT INTO `departments` (`id`, `department`) VALUES
-(5, 'Admin'),
-(6, 'Dcs'),
-(4, 'Finance'),
-(2, 'HR'),
-(1, 'IT Department - Sample'),
-(3, 'Registrar');
+INSERT INTO `departments` (`id`, `department`, `status`) VALUES
+(1, 'IT Department - Sample', 'Active'),
+(2, 'HR', 'Active'),
+(3, 'Registrar', 'Active'),
+(4, 'Finance', 'Active'),
+(5, 'Admin', 'Active'),
+(6, 'Dcs', 'Active'),
+(9, 'testing update', 'Archived');
 
 -- --------------------------------------------------------
 
@@ -254,18 +256,19 @@ CREATE TABLE `personnels` (
   `last_name` varchar(50) NOT NULL,
   `account_status` int(11) NOT NULL,
   `department` int(11) NOT NULL,
-  `employee_no` varchar(50) DEFAULT NULL
+  `employee_no` varchar(50) DEFAULT NULL,
+  `employee_type` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `personnels`
 --
 
-INSERT INTO `personnels` (`id`, `first_name`, `middle_name`, `last_name`, `account_status`, `department`, `employee_no`) VALUES
-(1, 'Juan', NULL, 'Dela Cruz', 1, 1, 'EMP-TEST-001'),
-(3, 'v', NULL, 'c', 1, 1, '1010'),
-(4, 'm', 'i', 'm', 1, 5, '2010'),
-(5, 'a', NULL, 'e', 1, 2, '1228');
+INSERT INTO `personnels` (`id`, `first_name`, `middle_name`, `last_name`, `account_status`, `department`, `employee_no`, `employee_type`) VALUES
+(1, 'Juan', NULL, 'Dela Cruz', 1, 1, 'EMP-TEST-001', NULL),
+(3, 'v', NULL, 'c', 1, 1, '1010', NULL),
+(4, 'm', 'i', 'm', 1, 5, '2010', NULL),
+(5, 'a', NULL, 'e', 1, 2, '1228', NULL);
 
 -- --------------------------------------------------------
 
@@ -295,7 +298,8 @@ INSERT INTO `users` (`id`, `first_name`, `middle_name`, `last_name`, `username`,
 (3, 'Ashley Mei', 'Ison', 'Madrid', 'amadrid55', '600000.oliIxV/GuB429KNldO8ygQ==.uyPBS5tFLpQsp/WMtZOrrZRa6iJxHsd4Ee3iMlsUNHY=', 2, 1, '2026-11-13 08:14:32', '2026-11-13 08:14:32'),
 (5, 'Angelica Lourdes', NULL, 'Estanislao', 'aestani76', '600000.swBtEVJ/0ne+0a2pYOK4rA==.LMmUmhpt8L+IMS5E9DFPvIfo4/qrufJ/ttLrDWbBqOE=', 1, 1, '2026-11-13 08:24:55', '2026-11-13 08:24:55'),
 (6, 'Vich Andrei', 'Tekistekis', 'Cortez', 'vcortez70', '600000.C1JLcRxDLfGcP1wgsDhsjw==.ZTY8tW0jQCX9bpOzI5tLqI9loq1/WhmFocJ3MWhcoxA=', 1, 1, '2026-11-15 08:04:02', '2026-11-15 08:04:02'),
-(7, 'Loughshinny', NULL, 'Dublinn', 'ldublin26', '600000.Jm4uVscVjgG4/gVbjxx/RA==.9gVXt/4BMBUcXBgHrHcFxFiwjGeHJ1C4Iyrw0eW0EcA=', 2, 1, '2026-11-15 08:46:48', '2026-11-15 08:46:48');
+(7, 'Loughshinny', NULL, 'Dublinn', 'ldublin26', '600000.Jm4uVscVjgG4/gVbjxx/RA==.9gVXt/4BMBUcXBgHrHcFxFiwjGeHJ1C4Iyrw0eW0EcA=', 2, 1, '2026-11-15 08:46:48', '2026-11-15 08:46:48'),
+(8, 'Angelica', 'B', 'Estanislao', 'aestani50', '600000.7mYqko76pl4e01KzWZadag==.4A62M+owU1fzUzdAPLYuI+Xs2KFuYnk2WCyK1YTb+/g=', 1, 1, '2026-11-18 07:23:14', '2026-11-18 07:23:14');
 
 -- --------------------------------------------------------
 
@@ -468,7 +472,7 @@ ALTER TABLE `asset_transactions_batches`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `log_activity`
@@ -486,7 +490,7 @@ ALTER TABLE `personnels`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user_roles`

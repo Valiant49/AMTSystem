@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="AMTSystem.Wpf.Views.PersonnelMgmt.Departments.AddDepartment"
+    x:Class="AMTSystem.Wpf.Views.PersonnelMgmt.Departments.ManageDepartments"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,7 +22,8 @@
                 Margin="10"
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
-                IsReadOnly="True">
+                IsReadOnly="True"
+                SelectionChanged="DepartmentGrid_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="*"
@@ -39,11 +40,35 @@
             <StackPanel Margin="0,150">
                 <TextBlock Text="Department" />
                 <TextBox x:Name="DeptInput" Margin="0,0,4,8" />
-                <Button
+                <!--<Button
                     Width="75"
                     HorizontalAlignment="Right"
                     Click="Dept_Submit_Clicked"
-                    Content="Submit" />
+                    Content="Submit" />-->
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+
+                    <Button
+                        x:Name="CancelButton"
+                        Width="75"
+                        Margin="0,0,8,0"
+                        Click="CancelButton_Click"
+                        Content="Cancel"
+                        Visibility="Collapsed" />
+
+                    <Button
+                        x:Name="ArchiveButton"
+                        Width="75"
+                        Margin="0,0,8,0"
+                        Click="ArchiveButton_Click"
+                        Content="Archive" />
+
+                    <Button
+                        x:Name="DeptSubmitButton"
+                        Width="75"
+                        Click="Dept_Submit_Clicked"
+                        Content="Add" />
+
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>

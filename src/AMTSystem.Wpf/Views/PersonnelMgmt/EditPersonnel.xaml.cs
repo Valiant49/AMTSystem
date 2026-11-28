@@ -18,49 +18,34 @@ namespace AMTSystem.Wpf.Views.PersonnelMgmt;
 
 
     public partial class EditPersonnel : UserControl
+{
+    // Stores all personnel currently displayed.
+    private List<PersonnelRecord> _allPersonnel = new();
+
+    // Stores the currently selected personnel.
+    private PersonnelRecord? _selectedPersonnel;
+
+    public EditPersonnel()
     {
-        // Stores all personnel currently displayed.
-        private List<PersonnelRecord> _allPersonnel = new();
+        InitializeComponent();
 
-        // Stores the currently selected personnel.
-        private PersonnelRecord? _selectedPersonnel;
+        Loaded += EditPersonnel_Loaded;
+    }
+    private void FormTextChanged(object sender, TextChangedEventArgs e)
+    {
 
-        // Prevents review from refreshing while loading details.
-        private bool _isLoading;
+    }
+    private void FormSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
 
-        // Temporary personnel class for testing.
-        private class PersonnelRecord
-        {
-            public string EmployeeNo { get; set; } = "";
-            public string FirstName { get; set; } = "";
-            public string MiddleName { get; set; } = "";
-            public string Surname { get; set; } = "";
-            public string Position { get; set; } = "";
-            public string Department { get; set; } = "";
-            public string EmployeeType { get; set; } = "";
+    }
 
-            public string Name =>
-                $"{FirstName} {MiddleName} {Surname}".Replace("  ", " ").Trim();
-        }
 
-        // Represents a changed field in the Review section.
-        private class FieldChange
-        {
-            public string Field { get; set; } = "";
-            public string OldValue { get; set; } = "";
-            public string NewValue { get; set; } = "";
-        }
 
-        public EditPersonnel()
-        {
-            InitializeComponent();
 
-            Loaded += EditPersonnel_Loaded;
-        }
-
-        // ==========================================
-        // PAGE LOADING
-        // ==========================================
+    // ==========================================
+    // TEMPORARY PERSONNEL CLASS
+    // ==========================================
 
         private void EditPersonnel_Loaded(object sender, RoutedEventArgs e)
         {
@@ -73,11 +58,43 @@ namespace AMTSystem.Wpf.Views.PersonnelMgmt;
             //EditForm.IsEnabled = false;
             //SaveButton.IsEnabled = false;
         }
+    private class PersonnelRecord
+    {
+        public string EmployeeNo { get; set; } = "";
+        public string FirstName { get; set; } = "";
+        public string MiddleName { get; set; } = "";
+        public string Surname { get; set; } = "";
+        public string Position { get; set; } = "";
+        public string Department { get; set; } = "";
+        public string EmployeeType { get; set; } = "";
 
-        private void LoadPersonnel()
-        {
-            // Temporary sample data.
-            // Replace this with database records later.
+        public string Name =>
+            $"{FirstName} {MiddleName} {Surname}"
+            .Replace("  ", " ").Trim();
+    }
+
+    // ==========================================
+    // PAGE LOADING
+    // ==========================================
+
+    private void EditPersonnel_Loaded(
+        object sender,
+        RoutedEventArgs e)
+    {
+       
+
+        LoadPersonnel();
+
+        PersonnelGrid.ItemsSource = _allPersonnel;
+
+        EditForm.IsEnabled = false;
+        SaveButton.IsEnabled = false;
+    }
+
+    private void LoadPersonnel()
+    {
+        // Temporary sample data.
+        // Database connection will be added later.
 
             //_allPersonnel = new List<PersonnelRecord>
             //{
@@ -116,9 +133,9 @@ namespace AMTSystem.Wpf.Views.PersonnelMgmt;
             //};
         }
 
-        // ==========================================
-        // PERSONNEL SEARCH
-        // ==========================================
+    // ==========================================
+    // PERSONNEL SEARCH
+    // ==========================================
 
         private void PersonnelSearchBox_TextChanged(
             object sender,
@@ -138,20 +155,24 @@ namespace AMTSystem.Wpf.Views.PersonnelMgmt;
             //PersonnelGrid.ItemsSource = filteredPersonnel;
         }
 
-        private static bool Contains(string? source, string searchText)
-        {
-            return source?.Contains(
-                searchText,
-                StringComparison.OrdinalIgnoreCase) ?? false;
-        }
+    private static bool Contains(
+        string? source,
+        string searchText)
+    {
+        return source?.Contains(
+            searchText,
+            StringComparison.OrdinalIgnoreCase) ?? false;
+    }
 
-        // ==========================================
-        // SELECT PERSONNEL
-        // ==========================================
+    // ==========================================
+    // SELECT PERSONNEL
+    // ==========================================
 
-        private void SelectPersonnelButton_Click(
-            object sender,
-            RoutedEventArgs e)
+    private void SelectPersonnelButton_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (PersonnelGrid.SelectedItem is not PersonnelRecord personnel)
         {
             //if (PersonnelGrid.SelectedItem is not PersonnelRecord personnel)
             //{
@@ -200,25 +221,20 @@ namespace AMTSystem.Wpf.Views.PersonnelMgmt;
             //RefreshReview();
         }
 
-        // ==========================================
-        // LIVE REVIEW
-        // ==========================================
+    // ==========================================
+    // SAVE CHANGES
+    // ==========================================
 
-        private void FormTextChanged(
-            object sender,
-            TextChangedEventArgs e)
-        {
-            RefreshReview();
-        }
+    private void SaveButton_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (_selectedPersonnel == null)
+            return;
 
-        private void FormSelectionChanged(
-            object sender,
-            SelectionChangedEventArgs e)
-        {
-            RefreshReview();
-        }
-
-        private void RefreshReview()
+        // Validate required fields.
+        if (string.IsNullOrWhiteSpace(FirstNameBox.Text) ||
+            string.IsNullOrWhiteSpace(SurnameBox.Text))
         {
             //if (_isLoading || _selectedPersonnel == null)
             //    return;
@@ -254,11 +270,7 @@ namespace AMTSystem.Wpf.Views.PersonnelMgmt;
             //SaveButton.IsEnabled = changes.Count > 0;
         }
 
-        private static void Compare(
-            List<FieldChange> changes,
-            string field,
-            string? oldValue,
-            string? newValue)
+        if (EmployeeTypeCombo.SelectedItem is not ComboBoxItem selectedType)
         {
             //oldValue ??= "";
             //newValue = (newValue ?? "").Trim();
@@ -329,9 +341,7 @@ namespace AMTSystem.Wpf.Views.PersonnelMgmt;
             //    MessageBoxImage.Information);
         }
 
-        // ==========================================
-        // CANCEL CHANGES
-        // ==========================================
+    // CANCEL CHANGES
 
         private void CancelButton_Click(
             object sender,
@@ -343,4 +353,4 @@ namespace AMTSystem.Wpf.Views.PersonnelMgmt;
             //LoadFormFromPersonnel(_selectedPersonnel);
         }
     }
-
+}
