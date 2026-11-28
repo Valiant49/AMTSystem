@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/database/">
-    <File Path="database/20261128_amtsystem_ddl_only.sql" />
+    <File Path="database/20261128_added_created_at_and_updated_at.sql" />
   </Folder>
   <Folder Name="/src/">
     <File Path="system_strucure.txt" />
