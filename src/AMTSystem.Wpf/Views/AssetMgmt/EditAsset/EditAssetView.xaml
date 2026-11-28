@@ -28,10 +28,10 @@
                 <TextBlock x:Name="EditingOfficerText" VerticalAlignment="Center" />
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <!--<StackPanel Grid.Column="1" Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Center" Text="Date Modified: " />
                 <DatePicker x:Name="DateModifiedPicker" Width="200" />
-            </StackPanel>
+            </StackPanel>-->
         </Grid>
 
         <!--  ASSET SELECTION AND EDITING  -->
@@ -181,6 +181,9 @@
                             Grid.Row="3"
                             Grid.Column="1"
                             Margin="0,0,0,10"
+                            DisplayMemberPath="Name"
+                            SelectedValue="{Binding CategoryId}"
+                            SelectedValuePath="Id"
                             SelectionChanged="FormSelectionChanged" />
 
                         <!--  CONDITION  -->
@@ -196,6 +199,9 @@
                             Grid.Row="4"
                             Grid.Column="1"
                             Margin="0,0,0,10"
+                            DisplayMemberPath="Name"
+                            SelectedValue="{Binding ConditionId}"
+                            SelectedValuePath="Id"
                             SelectionChanged="FormSelectionChanged" />
 
                         <!--  MANUFACTURER  -->

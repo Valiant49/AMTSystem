@@ -17,8 +17,6 @@ public static class AssetRepository
 
         using var cmd = conn.CreateCommand();
         cmd.CommandText =
-            //"INSERT INTO assets (name, tag, category_id, status_id, condition_id) " +
-            //"VALUES (@name, @tag, @category_id, @status_id, @condition_id)";
             "INSERT into assets(name, tag, category_id, status_id, condition_id, description, serial_number, components, manufacturer, model) " +
             "VALUES (@name, @tag, @category_id, @status_id, @condition_id, @description, @serial_number, @components, @manufacturer, @model)";
 
@@ -76,6 +74,7 @@ public static class AssetRepository
             a.Name = reader.GetString("name");
             a.Tag = reader.GetString("tag");
             a.SerialNumber = reader.GetString("serial_number");
+            a.Category_Id = reader.GetInt32("category_id");
             a.Category_String = reader.GetString("category_name");
             a.Condition_Id = reader.GetInt32("condition_id");
             a.Condition_String = reader.GetString("condition");
@@ -228,4 +227,30 @@ public static class AssetRepository
         return items;
     }
 
+    public static long Update(Asset asset)
+    {
+        using var conn = new MySqlConnection(ConnectionString);
+        conn.Open();
+
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText =
+            """
+            UPDATE assets
+            SET name = @name, serial_number = @serial_number,
+                category_id = @category_id, condition_id = @condition_id,
+                manufacturer = @manufacturer, model = @model
+            WHERE id = @id
+            """;
+
+        cmd.Parameters.AddWithValue("@name", asset.Name);
+        cmd.Parameters.AddWithValue("@serial_number", asset.SerialNumber);
+        cmd.Parameters.AddWithValue("@category_id", asset.Category_Id);
+        cmd.Parameters.AddWithValue("@condition_id", asset.Condition_Id);
+        cmd.Parameters.AddWithValue("@manufacturer", asset.Manufacturer);
+        cmd.Parameters.AddWithValue("@model", asset.Model);
+        cmd.Parameters.AddWithValue("@id", asset.Id);
+
+        cmd.ExecuteNonQuery();
+        return cmd.LastInsertedId;
+    }
 }

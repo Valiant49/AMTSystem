@@ -1,26 +1,18 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using AMTSystem.Data.Repositories;
-using MySqlConnector;
 
 using AMTSystem.Core.Models;
- 
+using AMTSystem.Data.Repositories;
+
+using MySqlConnector;
+
 namespace AMTSystem.Wpf.Views.AssetMgmt
 {
     public partial class EditAssetView : UserControl
     {
-        // Stores all assets loaded into the page.
-        private List<Asset> _allAssets = new();
-
-        // Stores the currently selected asset.
-        private Asset? _selectedAsset;
-
-        // Prevents the review from refreshing while loading asset details.
-        private bool _isLoading;
+        private List<Asset> _allAssets = new();     // Stores all assets loaded into the page.
+        private Asset? _selectedAsset;              // Stores the currently selected asset.
+        private bool _isLoading;                    // Prevents the review from refreshing while loading asset details.
 
         // Represents a changed field in the Review section.
         private class FieldChange
@@ -33,8 +25,15 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         public EditAssetView()
         {
             InitializeComponent();
-
+            CategoryCombo.ItemsSource = WithPrompt(AssetRepository.GetAssetCategories(), "Select a category...");
+            ConditionCombo.ItemsSource = WithPrompt(AssetRepository.GetAssetConditions(), "Select a condition...");
             Loaded += EditAssetView_Loaded;
+        }
+
+        private static List<LookupItem> WithPrompt(List<LookupItem> items, string prompt)
+        {
+            items.Insert(0, new LookupItem { Id = 0, Name = prompt });
+            return items;
         }
 
         // ==========================================
@@ -42,7 +41,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         // ==========================================
         private void EditAssetView_Loaded(object sender, RoutedEventArgs e)
         {
-            DateModifiedPicker.SelectedDate = DateTime.Today;
+            //DateModifiedPicker.SelectedDate = DateTime.Today;
 
             LoadAssets();
 
@@ -128,17 +127,14 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             TagBox.Text = asset.Tag;
             NameBox.Text = asset.Name;
             SerialNumberBox.Text = asset.SerialNumber;
+            CategoryCombo.SelectedValue = asset.Category_Id;
+            ConditionCombo.SelectedValue = asset.Condition_Id;
             ManufacturerBox.Text = asset.Manufacturer;
             ModelBox.Text = asset.Model;
-
-            // TODO: Set the selected Category and Condition
-            // after confirming their actual data types.
 
             _isLoading = false;
 
             EditForm.IsEnabled = true;
-
-
 
             RefreshReview();
         }
@@ -175,7 +171,18 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
                 "Serial No.",
                 _selectedAsset.SerialNumber,
                 SerialNumberBox.Text);
-
+            CompareLookup(
+                changes,
+                "Category",
+                _selectedAsset.Category_Id,
+                _selectedAsset.Category_String,
+                CategoryCombo.SelectedItem as  LookupItem);
+            CompareLookup(
+                changes,
+                "Condition",
+                _selectedAsset.Condition_Id,
+                _selectedAsset.Condition_String,
+                ConditionCombo.SelectedItem as LookupItem);
             Compare(
                 changes,
                 "Manufacturer",
@@ -187,12 +194,6 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
                 "Model",
                 _selectedAsset.Model,
                 ModelBox.Text);
-
-            // Category and Condition are excluded for now.
-            // Their ComboBox values need to be connected
-            // to the actual Asset model first.
-
-
 
             SaveButton.IsEnabled = changes.Count > 0;
         }
@@ -209,6 +210,23 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
                     Field = field,
                     OldValue = oldValue,
                     NewValue = newValue
+                });
+            }
+        }
+
+        private static void CompareLookup(List<FieldChange> changes, string field, int? oldId, string? oldName, LookupItem? selected)
+        {
+            // nothing selected, or the prompt is showing: not a real change
+            if (selected == null || selected.Id == 0)
+                return;
+
+            if (selected.Id != (oldId ?? 0))
+            {
+                changes.Add(new FieldChange
+                {
+                    Field = field,
+                    OldValue = oldName ?? "",
+                    NewValue = selected.Name
                 });
             }
         }
@@ -233,18 +251,48 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
                 return;
             }
 
+            if (CategoryCombo.SelectedItem is not LookupItem category || category.Id == 0)
+            {
+                MessageBox.Show(
+                    "Please select a category.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                CategoryCombo.Focus();
+                return;
+            }
+
+            if (ConditionCombo.SelectedItem is not LookupItem condition || condition.Id == 0)
+            {
+                MessageBox.Show(
+                    "Please select a condition.",
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                ConditionCombo.Focus();
+                return;
+            }
+
             // Apply the edited values to the selected asset.
             _selectedAsset.Name = NameBox.Text.Trim();
-
             _selectedAsset.SerialNumber = SerialNumberBox.Text.Trim();
 
-            _selectedAsset.Manufacturer = ManufacturerBox.Text.Trim();
+            _selectedAsset.Category_Id = category.Id;
+            _selectedAsset.Category_String = category.Name;
 
+            _selectedAsset.Condition_Id = condition.Id;
+            _selectedAsset.Condition_String = condition.Name;
+
+            _selectedAsset.Manufacturer = ManufacturerBox.Text.Trim();
             _selectedAsset.Model = ModelBox.Text.Trim();
 
             // TODO: Save the updated asset to the database.
             // Example:
             // _assetService.Update(_selectedAsset);
+
+            AssetRepository.Update(_selectedAsset);
 
             // Refresh the asset list.
             AssetGrid.Items.Refresh();
@@ -253,7 +301,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             LoadFormFromAsset(_selectedAsset);
 
             MessageBox.Show(
-                "Asset updated in the current application data.",
+                "Asset record updated.",
                 "Success",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -270,9 +318,9 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             LoadFormFromAsset(_selectedAsset);
         }
 
-        private class ReviewAssetText
-        {
+        //private class ReviewAssetText
+        //{
 
-        }
+        //}
     }
 }

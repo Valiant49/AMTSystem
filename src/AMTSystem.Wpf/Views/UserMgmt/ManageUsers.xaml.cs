@@ -15,7 +15,7 @@ namespace AMTSystem.Wpf.Views.UserMgmt;
 public partial class ManageUsers : UserControl
 {
     private User? selectedUser;
-    private bool isLoading = false;
+    //private bool isLoading = false;
 
     public ManageUsers()
     {
