@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2026 at 07:04 AM
--- Server version: 10.11.16-MariaDB
--- PHP Version: 8.3.36
+-- Generation Time: Nov 28, 2026 at 09:58 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.6.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,15 +32,6 @@ CREATE TABLE `account_statuses` (
   `status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `account_statuses`
---
-
-INSERT INTO `account_statuses` (`id`, `status`) VALUES
-(1, 'Active'),
-(2, 'Inactive'),
-(3, 'Suspended');
-
 -- --------------------------------------------------------
 
 --
@@ -62,21 +53,6 @@ CREATE TABLE `assets` (
   `model` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `assets`
---
-
-INSERT INTO `assets` (`id`, `name`, `tag`, `category_id`, `parent_asset_id`, `status_id`, `condition_id`, `description`, `serial_number`, `components`, `manufacturer`, `model`) VALUES
-(1, 'System Unit', 'AST-001', 2, NULL, 3, 2, 'Main computer system unit', 'SN-001', 'RAM, HDD, Fan', 'Dell', 'abc'),
-(2, 'Motherboard', 'AST-002', 2, NULL, 1, 2, 'System unit motherboard', 'SN-002', NULL, 'AMD', 'def'),
-(3, 'RAM', 'AST-003', 2, NULL, 1, 2, 'System unit memory', 'SN-003', NULL, 'Samsung', 'ghi'),
-(4, 'Storage', 'AST-004', 2, NULL, 1, 2, 'System unit storage', 'SN-004', NULL, 'SanDisk', 'mno'),
-(5, 'Test Laptop', 'TST-001', 1, NULL, 1, 2, NULL, 'SN-005', NULL, 'Dell', 'mno'),
-(6, 'Test Monitor', 'TST-002', 1, NULL, 1, 2, NULL, 'SN-006', NULL, 'HP', 'xyz'),
-(8, 'Acer Nitro Laptop', 'AST-0008', 2, NULL, 2, 2, 'laptop', '1234567890', 'something', 'Acer', 'ANV-15-41'),
-(19, 'phone', '93526962', 4, NULL, 2, 4, 'phone', '12345678901', 'phone1', 'Tecno', 'KJ5'),
-(20, 'something', '46025178', 2, NULL, 1, 2, 'jsndkjns', '12345678jkjn', 'something1', 'Dell', 'mno');
-
 -- --------------------------------------------------------
 
 --
@@ -89,16 +65,6 @@ CREATE TABLE `asset_categories` (
   `parent_category_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `asset_categories`
---
-
-INSERT INTO `asset_categories` (`id`, `category`, `parent_category_id`) VALUES
-(1, 'Hardware', NULL),
-(2, 'Computer', 1),
-(3, 'Printers', 1),
-(4, 'Phones', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -110,17 +76,6 @@ CREATE TABLE `asset_conditions` (
   `condition` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `asset_conditions`
---
-
-INSERT INTO `asset_conditions` (`id`, `condition`) VALUES
-(1, 'New'),
-(2, 'Good'),
-(3, 'Fair'),
-(4, 'Poor'),
-(5, 'Damaged');
-
 -- --------------------------------------------------------
 
 --
@@ -131,17 +86,6 @@ CREATE TABLE `asset_statuses` (
   `id` int(11) NOT NULL,
   `status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `asset_statuses`
---
-
-INSERT INTO `asset_statuses` (`id`, `status`) VALUES
-(1, 'Available'),
-(2, 'Issued'),
-(3, 'Lent'),
-(4, 'Maintenance'),
-(5, 'Disposed');
 
 -- --------------------------------------------------------
 
@@ -164,16 +108,6 @@ CREATE TABLE `asset_transactions` (
   `open_asset_id` int(11) GENERATED ALWAYS AS (case when `returned_at` is null then `asset_id` else NULL end) STORED
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `asset_transactions`
---
-
-INSERT INTO `asset_transactions` (`id`, `batch_id`, `user_id`, `personnel_id`, `asset_id`, `transaction_date`, `remarks`, `transaction_type`, `returned_at`, `asset_condition_at_transaction`, `asset_condition_at_return`) VALUES
-(1, 1, 1, 1, 1, '2026-11-03 13:07:23', 'Sample lending transaction', 'Lent', NULL, 2, NULL),
-(14, 2, 6, 3, 5, '2026-11-17 14:30:51', NULL, 'Issued', NULL, 2, NULL),
-(15, 3, 6, 1, 19, '2026-11-17 15:02:28', NULL, 'Issued', NULL, 4, NULL),
-(16, 3, 6, 1, 8, '2026-11-17 15:02:28', NULL, 'Issued', NULL, 2, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -188,15 +122,6 @@ CREATE TABLE `asset_transactions_batches` (
   `remarks` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `asset_transactions_batches`
---
-
-INSERT INTO `asset_transactions_batches` (`id`, `user_id`, `personnel_id`, `transaction_date`, `remarks`) VALUES
-(1, 1, 1, '2026-11-03 13:07:23', 'Sample lending transaction'),
-(2, 6, 3, '2026-11-17 14:30:51', NULL),
-(3, 6, 1, '2026-11-17 15:02:28', 'test issue 2_multiple items');
-
 -- --------------------------------------------------------
 
 --
@@ -208,19 +133,6 @@ CREATE TABLE `departments` (
   `department` varchar(100) NOT NULL,
   `status` varchar(20) NOT NULL DEFAULT 'Active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `departments`
---
-
-INSERT INTO `departments` (`id`, `department`, `status`) VALUES
-(1, 'IT Department - Sample', 'Active'),
-(2, 'HR', 'Active'),
-(3, 'Registrar', 'Active'),
-(4, 'Finance', 'Active'),
-(5, 'Admin', 'Active'),
-(6, 'Dcs', 'Active'),
-(9, 'testing update', 'Archived');
 
 -- --------------------------------------------------------
 
@@ -257,18 +169,8 @@ CREATE TABLE `personnels` (
   `account_status` int(11) NOT NULL,
   `department` int(11) NOT NULL,
   `employee_no` varchar(50) DEFAULT NULL,
-  `employee_type` varchar(50) DEFAULT NULL
+  `type` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `personnels`
---
-
-INSERT INTO `personnels` (`id`, `first_name`, `middle_name`, `last_name`, `account_status`, `department`, `employee_no`, `employee_type`) VALUES
-(1, 'Juan', NULL, 'Dela Cruz', 1, 1, 'EMP-TEST-001', NULL),
-(3, 'v', NULL, 'c', 1, 1, '1010', NULL),
-(4, 'm', 'i', 'm', 1, 5, '2010', NULL),
-(5, 'a', NULL, 'e', 1, 2, '1228', NULL);
 
 -- --------------------------------------------------------
 
@@ -289,18 +191,6 @@ CREATE TABLE `users` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `first_name`, `middle_name`, `last_name`, `username`, `password_hash`, `role`, `account_status`, `created_at`, `updated_at`) VALUES
-(1, 'Test', NULL, 'Administrator', 'test_admin', 'TEST_ONLY_NOT_A_REAL_PASSWORD_HASH', 1, 1, '2026-11-02 15:00:51', '2026-11-02 15:00:51'),
-(3, 'Ashley Mei', 'Ison', 'Madrid', 'amadrid55', '600000.oliIxV/GuB429KNldO8ygQ==.uyPBS5tFLpQsp/WMtZOrrZRa6iJxHsd4Ee3iMlsUNHY=', 2, 1, '2026-11-13 08:14:32', '2026-11-13 08:14:32'),
-(5, 'Angelica Lourdes', NULL, 'Estanislao', 'aestani76', '600000.swBtEVJ/0ne+0a2pYOK4rA==.LMmUmhpt8L+IMS5E9DFPvIfo4/qrufJ/ttLrDWbBqOE=', 1, 1, '2026-11-13 08:24:55', '2026-11-13 08:24:55'),
-(6, 'Vich Andrei', 'Tekistekis', 'Cortez', 'vcortez70', '600000.C1JLcRxDLfGcP1wgsDhsjw==.ZTY8tW0jQCX9bpOzI5tLqI9loq1/WhmFocJ3MWhcoxA=', 1, 1, '2026-11-15 08:04:02', '2026-11-15 08:04:02'),
-(7, 'Loughshinny', NULL, 'Dublinn', 'ldublin26', '600000.Jm4uVscVjgG4/gVbjxx/RA==.9gVXt/4BMBUcXBgHrHcFxFiwjGeHJ1C4Iyrw0eW0EcA=', 2, 1, '2026-11-15 08:46:48', '2026-11-15 08:46:48'),
-(8, 'Angelica', 'B', 'Estanislao', 'aestani50', '600000.7mYqko76pl4e01KzWZadag==.4A62M+owU1fzUzdAPLYuI+Xs2KFuYnk2WCyK1YTb+/g=', 1, 1, '2026-11-18 07:23:14', '2026-11-18 07:23:14');
-
 -- --------------------------------------------------------
 
 --
@@ -311,14 +201,6 @@ CREATE TABLE `user_roles` (
   `id` int(11) NOT NULL,
   `role` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `user_roles`
---
-
-INSERT INTO `user_roles` (`id`, `role`) VALUES
-(1, 'Administrator'),
-(2, 'IT Staff');
 
 --
 -- Indexes for dumped tables
@@ -430,49 +312,49 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `account_statuses`
 --
 ALTER TABLE `account_statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `asset_categories`
 --
 ALTER TABLE `asset_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `asset_conditions`
 --
 ALTER TABLE `asset_conditions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `asset_statuses`
 --
 ALTER TABLE `asset_statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `asset_transactions`
 --
 ALTER TABLE `asset_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `asset_transactions_batches`
 --
 ALTER TABLE `asset_transactions_batches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `log_activity`
@@ -484,19 +366,19 @@ ALTER TABLE `log_activity`
 -- AUTO_INCREMENT for table `personnels`
 --
 ALTER TABLE `personnels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

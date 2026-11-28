@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/database/">
+    <File Path="database/20261128_amtsystem_ddl_only.sql" />
+  </Folder>
   <Folder Name="/src/">
     <File Path="system_strucure.txt" />
     <Project Path="src/AMTSystem.Core/AMTSystem.Core.csproj" />
