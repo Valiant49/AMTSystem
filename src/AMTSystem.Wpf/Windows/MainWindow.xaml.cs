@@ -106,6 +106,13 @@ public partial class MainWindow : Window
                 ContentArea.Content = add_user;
                 setHeaderText("Add System User");
                 break;
+            case "ManageUsers":
+                ManageUsers manage_users = new ManageUsers();
+                //line for some event handler thing
+                ContentArea.Content = manage_users;
+                setHeaderText("Manage Users");
+                break;
+           
         }
     }
 
@@ -130,6 +137,12 @@ public partial class MainWindow : Window
     {
         ContentArea.Content = new AddPersonnel();
         setHeaderText("Add Personnel Record");
+    }
+
+    private void Manage_Submit(object? sender, EventArgs e)
+    {
+        ContentArea.Content = new ManageUsers();
+        setHeaderText("Manage Users");
     }
 
     private void User_Submit(object? sender, EventArgs e)

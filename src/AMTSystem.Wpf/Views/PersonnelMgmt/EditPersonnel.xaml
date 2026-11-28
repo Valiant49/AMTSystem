@@ -112,6 +112,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <!--  EMPLOYEE NUMBER  -->
@@ -222,6 +223,26 @@
                             <ComboBoxItem Content="Part-Time" />
 
                         </ComboBox>
+
+                        <!--  STATUS  -->
+                        <TextBlock
+                            Grid.Row="7"
+                            Grid.Column="0"
+                            Margin="0,0,16,0"
+                            VerticalAlignment="Center"
+                            Text="Status:" />
+
+                        <ComboBox
+                            x:Name="StatusCombo"
+                            Grid.Row="7"
+                            Grid.Column="1"
+                            SelectionChanged="FormSelectionChanged">
+
+                            <ComboBoxItem Content="Active" />
+                            <ComboBoxItem Content="Inactive" />
+
+                        </ComboBox>
+
 
                     </Grid>
                 </ScrollViewer>

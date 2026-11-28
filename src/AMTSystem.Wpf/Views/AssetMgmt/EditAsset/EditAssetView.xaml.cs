@@ -8,7 +8,7 @@ using AMTSystem.Data.Repositories;
 using MySqlConnector;
 
 using AMTSystem.Core.Models;
-
+ 
 namespace AMTSystem.Wpf.Views.AssetMgmt
 {
     public partial class EditAssetView : UserControl
@@ -42,7 +42,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         // ==========================================
         private void EditAssetView_Loaded(object sender, RoutedEventArgs e)
         {
-           
+            DateModifiedPicker.SelectedDate = DateTime.Today;
 
             LoadAssets();
 
@@ -138,7 +138,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
 
             EditForm.IsEnabled = true;
 
-            
+
 
             RefreshReview();
         }
@@ -192,7 +192,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             // Their ComboBox values need to be connected
             // to the actual Asset model first.
 
-            
+
 
             SaveButton.IsEnabled = changes.Count > 0;
         }
@@ -213,7 +213,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
             }
         }
 
-        
+
         // SAVE CHANGES
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
@@ -259,7 +259,7 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
                 MessageBoxImage.Information);
         }
 
-        
+
         // CANCEL CHANGES
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
@@ -276,4 +276,3 @@ namespace AMTSystem.Wpf.Views.AssetMgmt
         }
     }
 }
- 
