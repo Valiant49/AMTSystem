@@ -165,7 +165,7 @@ public static class AssetRepository
 
     public static List<LookupItem> GetAssetConditions()
     {
-        return GetLookup("SELECT ac.id, ac.condition AS name FROM asset_conditions ac ORDER BY ac.condition");
+        return GetLookup("SELECT ac.id, ac.condition AS name FROM asset_conditions ac ORDER BY ac.id");
     }
 
     public static List<string> GetAssetManufacturers()

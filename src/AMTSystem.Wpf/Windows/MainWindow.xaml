@@ -182,11 +182,11 @@
                         Content="Roles and Permissions"
                         Style="{StaticResource NavButton}"
                         Tag="Roles" />
-                    <Button
+                    <!--<Button
                         Click="Nav_Click"
                         Content="Personnel Records"
                         Style="{StaticResource NavButton}"
-                        Tag="Personnel" />
+                        Tag="Personnel" />-->
                     <Button
                         Click="Nav_Click"
                         Content="Activity Log"
